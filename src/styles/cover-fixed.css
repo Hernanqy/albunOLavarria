@@ -5083,3 +5083,325 @@ body {
     display: none;
   }
 }
+
+/* ============================================================
+   FIX DEFINITIVO CELULAR - HUB COMPACTO SIN SCROLL
+   Este bloque pisa todos los estilos anteriores en móvil
+   ============================================================ */
+
+@media (max-width: 760px) {
+  html,
+  body,
+  #root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden !important;
+  }
+
+  body {
+    position: fixed;
+    inset: 0;
+    overscroll-behavior: none;
+    touch-action: manipulation;
+  }
+
+  .clean-hub-screen {
+    width: 100vw !important;
+    height: 100svh !important;
+    min-height: 100svh !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+  }
+
+  .clean-hub-stage {
+    width: 100vw !important;
+    height: 100svh !important;
+    min-height: 100svh !important;
+    aspect-ratio: auto !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .clean-hub-bg {
+    background-size: cover !important;
+    background-position: center bottom !important;
+  }
+
+  .clean-hub-header {
+    top: 1.2% !important;
+    left: 50% !important;
+    width: 92% !important;
+    transform: translateX(-50%) !important;
+  }
+
+  .clean-hub-header span {
+    font-size: 0.54rem !important;
+    padding: 4px 10px !important;
+  }
+
+  .clean-hub-header h1 {
+    margin-top: 4px !important;
+    font-size: clamp(1.75rem, 7.4vw, 2.55rem) !important;
+    line-height: 0.86 !important;
+    letter-spacing: -0.08em !important;
+  }
+
+  .clean-hub-header p {
+    margin-top: 2px !important;
+    font-size: 0.68rem !important;
+    line-height: 1.05 !important;
+  }
+
+  .clean-hub-progress {
+    width: 46% !important;
+    height: 7px !important;
+    margin-top: 42px !important;
+  }
+
+  .clean-hub-counter {
+    top: 1.2% !important;
+    right: 2% !important;
+    min-width: 50px !important;
+    min-height: 42px !important;
+    border-radius: 14px !important;
+  }
+
+  .clean-hub-counter strong {
+    font-size: 0.92rem !important;
+  }
+
+  .clean-hub-counter small {
+    font-size: 0.56rem !important;
+  }
+
+  .clean-hub-world {
+    position: absolute !important;
+    inset: 18% 0 2% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .clean-hub-object {
+    position: absolute !important;
+    gap: 4px !important;
+  }
+
+  .clean-hub-label {
+    font-size: 0.54rem !important;
+    padding: 5px 9px !important;
+    border-width: 1px !important;
+    white-space: nowrap !important;
+  }
+
+  .clean-hub-visual {
+    min-height: 0 !important;
+    filter: drop-shadow(0 9px 10px rgba(45, 42, 34, .2)) !important;
+  }
+
+  .clean-hub-visual img {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+  }
+
+  /* QR arriba izquierda */
+  .clean-hub-qr {
+    left: 8% !important;
+    top: 0 !important;
+    right: auto !important;
+    bottom: auto !important;
+    --obj-w: 86px !important;
+    --obj-h: 86px !important;
+  }
+
+  /* Figuritas arriba derecha */
+  .clean-hub-stickers {
+    right: 7% !important;
+    top: 0 !important;
+    left: auto !important;
+    bottom: auto !important;
+    --obj-w: 92px !important;
+    --obj-h: 82px !important;
+  }
+
+  /* Álbum centro */
+  .clean-hub-album {
+    left: 50% !important;
+    top: 27% !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: translateX(-50%) !important;
+    --obj-w: 178px !important;
+    --obj-h: 208px !important;
+  }
+
+  .clean-hub-album:hover {
+    transform: translateX(-50%) !important;
+  }
+
+  /* Sobre abajo izquierda */
+  .clean-hub-pack {
+    left: 8% !important;
+    bottom: 4% !important;
+    right: auto !important;
+    top: auto !important;
+    --obj-w: 88px !important;
+    --obj-h: 100px !important;
+  }
+
+  /* Mapa abajo derecha */
+  .clean-hub-map {
+    right: 5% !important;
+    bottom: 3% !important;
+    left: auto !important;
+    top: auto !important;
+    --obj-w: 132px !important;
+    --obj-h: 94px !important;
+  }
+
+  .clean-hub-footer {
+    display: none !important;
+  }
+}
+
+/* iPhone o navegadores con barras muy grandes */
+@media (max-width: 760px) and (max-height: 720px) {
+  .clean-hub-header h1 {
+    font-size: clamp(1.55rem, 6.8vw, 2.25rem) !important;
+  }
+
+  .clean-hub-header p {
+    display: none !important;
+  }
+
+  .clean-hub-progress {
+    margin-top: 36px !important;
+  }
+
+  .clean-hub-world {
+    inset: 15% 0 2% !important;
+  }
+
+  .clean-hub-qr {
+    --obj-w: 76px !important;
+    --obj-h: 76px !important;
+  }
+
+  .clean-hub-stickers {
+    --obj-w: 82px !important;
+    --obj-h: 74px !important;
+  }
+
+  .clean-hub-album {
+    top: 25% !important;
+    --obj-w: 160px !important;
+    --obj-h: 188px !important;
+  }
+
+  .clean-hub-pack {
+    --obj-w: 78px !important;
+    --obj-h: 90px !important;
+  }
+
+  .clean-hub-map {
+    --obj-w: 118px !important;
+    --obj-h: 84px !important;
+  }
+}
+
+/* Celular horizontal */
+@media (orientation: landscape) and (max-width: 980px) and (max-height: 560px) {
+  .clean-hub-screen {
+    width: 100vw !important;
+    height: 100svh !important;
+    overflow: hidden !important;
+  }
+
+  .clean-hub-stage {
+    width: 100vw !important;
+    height: 100svh !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .clean-hub-header {
+    top: 1% !important;
+    width: 72% !important;
+  }
+
+  .clean-hub-header span {
+    font-size: 0.48rem !important;
+    padding: 4px 9px !important;
+  }
+
+  .clean-hub-header h1 {
+    font-size: clamp(1.45rem, 4.4vw, 2.45rem) !important;
+  }
+
+  .clean-hub-header p {
+    display: none !important;
+  }
+
+  .clean-hub-progress {
+    width: 44% !important;
+    height: 7px !important;
+    margin-top: 8px !important;
+  }
+
+  .clean-hub-world {
+    inset: 17% 4% 3% !important;
+  }
+
+  .clean-hub-label {
+    font-size: 0.5rem !important;
+    padding: 4px 8px !important;
+  }
+
+  .clean-hub-qr {
+    left: 5% !important;
+    top: 2% !important;
+    --obj-w: 78px !important;
+    --obj-h: 78px !important;
+  }
+
+  .clean-hub-stickers {
+    right: 6% !important;
+    bottom: 1% !important;
+    top: auto !important;
+    --obj-w: 112px !important;
+    --obj-h: 94px !important;
+  }
+
+  .clean-hub-album {
+    left: 50% !important;
+    top: 20% !important;
+    transform: translateX(-50%) !important;
+    --obj-w: 165px !important;
+    --obj-h: 185px !important;
+  }
+
+  .clean-hub-pack {
+    right: 8% !important;
+    top: 2% !important;
+    left: auto !important;
+    bottom: auto !important;
+    --obj-w: 82px !important;
+    --obj-h: 96px !important;
+  }
+
+  .clean-hub-map {
+    left: 6% !important;
+    bottom: 1% !important;
+    right: auto !important;
+    top: auto !important;
+    --obj-w: 128px !important;
+    --obj-h: 90px !important;
+  }
+
+  .clean-hub-footer {
+    display: none !important;
+  }
+}
