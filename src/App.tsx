@@ -90,18 +90,6 @@ export default function App() {
     });
   }
 
-  function pasteRandom() {
-    const missing = albumCards.filter((card) => !pastedIds.includes(card.id));
-
-    if (missing.length === 0) {
-      return null;
-    }
-
-    const next = missing[Math.floor(Math.random() * missing.length)];
-    pasteCard(next);
-    return next;
-  }
-
   function openPack() {
     const missing = albumCards.filter((card) => !pastedIds.includes(card.id));
     const pool = missing.length > 0 ? missing : albumCards;
