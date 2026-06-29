@@ -1,6 +1,7 @@
 ﻿import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import { registerServiceWorker } from "./registerServiceWorker";
 import "./styles/globals.css";
 import "./styles/cover-fixed.css";
 
@@ -9,3 +10,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <App />
   </React.StrictMode>
 );
+
+registerServiceWorker();
