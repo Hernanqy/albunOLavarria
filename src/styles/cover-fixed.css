@@ -3634,3 +3634,265 @@ body::before {
     box-shadow: 0 12px 30px rgba(0,0,0,.24);
   }
 }
+
+/* ============================================================
+   PARTE 11 - HUB AJUSTADO PARA CELULAR HORIZONTAL
+   ============================================================ */
+
+.hub-back {
+  display: none;
+}
+
+.artistic-hub-screen {
+  padding: 0;
+  overflow: hidden;
+}
+
+.artistic-hub-stage {
+  width: min(100vw, 1180px);
+  height: min(100vh, 760px);
+  min-height: unset;
+  border-radius: 28px;
+}
+
+.artistic-hub-header {
+  padding: 14px 22px 0;
+  grid-template-columns: 1fr auto;
+}
+
+.artistic-hub-title {
+  grid-column: 1 / -1;
+}
+
+.artistic-hub-title span {
+  font-size: .68rem;
+  padding: 5px 11px;
+}
+
+.artistic-hub-title h1 {
+  margin-top: 6px;
+  font-size: clamp(2rem, 5vw, 3.6rem);
+}
+
+.artistic-hub-title p {
+  margin-top: 4px;
+  font-size: .92rem;
+}
+
+.hub-progress-pill {
+  position: absolute;
+  right: 24px;
+  top: 20px;
+  min-width: 76px;
+  min-height: 56px;
+}
+
+.artistic-progress {
+  margin-top: 10px;
+  height: 12px;
+  width: min(54vw, 640px);
+}
+
+.artistic-hub-world {
+  min-height: 0;
+  height: calc(100% - 168px);
+  padding: 20px 54px 54px;
+  display: grid;
+  grid-template-columns: 1fr 1.25fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 12px 34px;
+  align-items: center;
+}
+
+.hub-object-label {
+  font-size: .74rem;
+  padding: 7px 13px;
+  box-shadow: 0 8px 18px rgba(45, 42, 34, .14);
+}
+
+.hub-object-visual {
+  min-height: 120px;
+}
+
+.hub-object-visual img {
+  max-height: 168px;
+}
+
+.hub-album-object .hub-object-visual {
+  min-height: 245px;
+}
+
+.hub-album-object .hub-object-visual img {
+  max-height: 285px;
+}
+
+.hub-album-object {
+  align-self: center;
+}
+
+.hub-qr-object,
+.hub-pack-object,
+.hub-map-object,
+.hub-stickers-object {
+  align-self: center;
+}
+
+.artistic-hub-footer {
+  bottom: 10px;
+  font-size: .76rem;
+}
+
+.artistic-hub-footer span {
+  padding: 5px 9px;
+}
+
+/* Celulares horizontales */
+@media (orientation: landscape) and (max-height: 520px) {
+  .artistic-hub-stage {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    border-width: 0;
+  }
+
+  .artistic-hub-header {
+    padding: 8px 16px 0;
+  }
+
+  .artistic-hub-title span {
+    font-size: .6rem;
+    padding: 4px 9px;
+  }
+
+  .artistic-hub-title h1 {
+    margin-top: 3px;
+    font-size: clamp(1.9rem, 5vw, 3rem);
+    line-height: .84;
+  }
+
+  .artistic-hub-title p {
+    margin-top: 2px;
+    font-size: .78rem;
+  }
+
+  .hub-progress-pill {
+    top: 10px;
+    right: 14px;
+    min-width: 58px;
+    min-height: 46px;
+    border-radius: 16px;
+  }
+
+  .hub-progress-pill strong {
+    font-size: 1rem;
+  }
+
+  .hub-progress-pill small {
+    font-size: .62rem;
+  }
+
+  .artistic-progress {
+    margin-top: 6px;
+    height: 9px;
+    width: min(52vw, 520px);
+  }
+
+  .artistic-hub-world {
+    height: calc(100vh - 112px);
+    padding: 6px 44px 36px;
+    gap: 4px 24px;
+  }
+
+  .hub-object-card {
+    gap: 5px;
+  }
+
+  .hub-object-label {
+    font-size: .64rem;
+    padding: 5px 10px;
+  }
+
+  .hub-object-visual {
+    min-height: 96px;
+  }
+
+  .hub-object-visual img {
+    max-height: 118px;
+  }
+
+  .hub-album-object .hub-object-visual {
+    min-height: 190px;
+  }
+
+  .hub-album-object .hub-object-visual img {
+    max-height: 212px;
+  }
+
+  .hub-object-fallback {
+    width: 104px;
+    height: 104px;
+    border-radius: 24px;
+  }
+
+  .hub-album-object .hub-object-fallback {
+    width: 172px;
+    height: 202px;
+  }
+
+  .artistic-hub-footer {
+    bottom: 6px;
+    font-size: .64rem;
+    gap: 6px;
+  }
+
+  .artistic-hub-footer span {
+    padding: 4px 8px;
+  }
+}
+
+/* Pantallas horizontales chicas tipo 667x375 */
+@media (orientation: landscape) and (max-height: 430px) {
+  .artistic-hub-title h1 {
+    font-size: clamp(1.65rem, 4.8vw, 2.55rem);
+  }
+
+  .artistic-hub-title p {
+    display: none;
+  }
+
+  .artistic-progress {
+    width: 48vw;
+  }
+
+  .artistic-hub-world {
+    height: calc(100vh - 88px);
+    padding: 4px 36px 30px;
+  }
+
+  .hub-object-visual img {
+    max-height: 96px;
+  }
+
+  .hub-album-object .hub-object-visual img {
+    max-height: 176px;
+  }
+
+  .hub-object-label {
+    font-size: .58rem;
+  }
+}
+
+/* Eliminamos el aviso viejo de girar */
+@media (orientation: portrait) and (max-width: 900px) {
+  .hub-screen::before,
+  .fixed-cover-screen::before,
+  .fixed-album-screen::before,
+  .album-pages-screen::before,
+  .map-screen::before,
+  .pack-screen::before,
+  .scanner-screen::before,
+  .sticker-detail-screen::before {
+    display: none !important;
+    content: none !important;
+  }
+}

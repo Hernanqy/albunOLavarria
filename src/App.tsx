@@ -1,8 +1,6 @@
 ﻿import { useEffect, useState } from "react";
 import { AlbumIndex } from "./components/album/AlbumIndex";
 import { AlbumPages } from "./components/album/AlbumPages";
-import { CoverScreen } from "./components/album/CoverScreen";
-import { LandscapeGate } from "./components/album/LandscapeGate";
 import { MapScreen } from "./components/album/MapScreen";
 import { PackScreen } from "./components/album/PackScreen";
 import { ScannerScreen } from "./components/album/ScannerScreen";
@@ -15,7 +13,6 @@ import type { AlbumCard, SectionId, View } from "./types/album";
 const albumCards: AlbumCard[] = [...baseCards, ...extraCards];
 
 const STORAGE_KEY = "olavarria-en-figuritas-pasted-ids";
-const LANDSCAPE_KEY = "olavarria-en-figuritas-landscape-ok";
 
 const starterPastedIds = albumCards
   .filter((card) => card.pasted)
@@ -45,17 +42,22 @@ function readInitialPastedIds() {
   }
 }
 
-function readLandscapeAccepted() {
+async function tryLandscapeMode() {
   try {
-    return localStorage.getItem(LANDSCAPE_KEY) === "true";
+    const orientation = screen.orientation as ScreenOrientation & {
+      lock?: (orientation: OrientationLockType) => Promise<void>;
+    };
+
+    if (orientation?.lock) {
+      await orientation.lock("landscape");
+    }
   } catch {
-    return false;
+    // Algunos navegadores solo permiten bloquear orientación en pantalla completa o como PWA instalada.
   }
 }
 
 export default function App() {
-  const [landscapeAccepted, setLandscapeAccepted] = useState(readLandscapeAccepted);
-  const [view, setView] = useState<View>("cover");
+  const [view, setView] = useState<View>("index");
   const [activeSectionId, setActiveSectionId] = useState<SectionId>("historia");
   const [selectedCard, setSelectedCard] = useState<AlbumCard | null>(null);
   const [lastPackCard, setLastPackCard] = useState<AlbumCard | null>(null);
@@ -65,13 +67,12 @@ export default function App() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(pastedIds));
   }, [pastedIds]);
 
+  useEffect(() => {
+    tryLandscapeMode();
+  }, []);
+
   const completed = pastedIds.length;
   const percent = Math.round((completed / albumCards.length) * 100);
-
-  function acceptLandscapeMode() {
-    localStorage.setItem(LANDSCAPE_KEY, "true");
-    setLandscapeAccepted(true);
-  }
 
   function isPasted(card: AlbumCard) {
     return pastedIds.includes(card.id);
@@ -118,21 +119,13 @@ export default function App() {
     return card;
   }
 
-  if (!landscapeAccepted) {
-    return <LandscapeGate onContinue={acceptLandscapeMode} />;
-  }
-
-  if (view === "cover") {
-    return <CoverScreen onStart={() => setView("index")} />;
-  }
-
   if (view === "index") {
     return (
       <AlbumIndex
         completed={completed}
         total={albumCards.length}
         percent={percent}
-        onBackToCover={() => setView("cover")}
+        onBackToCover={() => setView("index")}
         onExplore={() => setView("section")}
         onOpenPack={() => {
           setLastPackCard(null);
