@@ -1,10 +1,9 @@
-﻿import { ArrowLeft, BookOpen, Image, Map, PackageOpen, QrCode } from "lucide-react";
+﻿import { BookOpen, Image, Map, PackageOpen, QrCode } from "lucide-react";
 
 type Props = {
   completed: number;
   total: number;
   percent: number;
-  onBackToCover: () => void;
   onExplore: () => void;
   onOpenPack: () => void;
   onScanner: () => void;
@@ -21,10 +20,10 @@ type HubObjectProps = {
 
 function HubObject({ label, imageSrc, fallback, className, onClick }: HubObjectProps) {
   return (
-    <button className={`hub-object-card ${className}`} onClick={onClick}>
-      <span className="hub-object-label">{label}</span>
+    <button className={`clean-hub-object ${className}`} onClick={onClick}>
+      <span className="clean-hub-label">{label}</span>
 
-      <div className="hub-object-visual">
+      <div className="clean-hub-visual">
         <img
           src={imageSrc}
           alt={label}
@@ -33,7 +32,7 @@ function HubObject({ label, imageSrc, fallback, className, onClick }: HubObjectP
           }}
         />
 
-        <div className="hub-object-fallback">
+        <div className="clean-hub-fallback">
           {fallback}
         </div>
       </div>
@@ -45,85 +44,74 @@ export function AlbumIndex({
   completed,
   total,
   percent,
-  onBackToCover,
   onExplore,
   onOpenPack,
   onScanner,
   onMap
 }: Props) {
   return (
-    <main className="hub-screen artistic-hub-screen">
-      <section className="artistic-hub-stage">
-        <div className="artistic-sky" />
-        <div className="artistic-city" />
-        <div className="artistic-river" />
-        <div className="artistic-paper-texture" />
+    <main className="clean-hub-screen">
+      <section className="clean-hub-stage">
+        <div className="clean-hub-bg" />
 
-        <header className="artistic-hub-header">
-          <button className="hub-back" onClick={onBackToCover}>
-            <ArrowLeft size={18} />
-            Tapa
-          </button>
+        <header className="clean-hub-header">
+          <span>Menú principal</span>
+          <h1>Olavarría en Figuritas</h1>
+          <p>Jugá, coleccioná y descubrí la ciudad.</p>
 
-          <div className="artistic-hub-title">
-            <span>Menú principal</span>
-            <h1>Olavarría en Figuritas</h1>
-            <p>Jugá, coleccioná y descubrí la ciudad.</p>
-          </div>
-
-          <div className="hub-progress-pill">
-            <strong>{percent}%</strong>
-            <small>{completed} / {total}</small>
+          <div className="clean-hub-progress">
+            <div style={{ width: `${percent}%` }} />
           </div>
         </header>
 
-        <div className="hub-progress-bar artistic-progress">
-          <div style={{ width: `${percent}%` }} />
+        <div className="clean-hub-counter">
+          <strong>{percent}%</strong>
+          <small>{completed} / {total}</small>
         </div>
 
-        <div className="artistic-hub-world">
+        <div className="clean-hub-world">
           <HubObject
             label="Escanear QR"
             imageSrc="/images/hub/scanner-qr.png"
-            fallback={<QrCode size={58} />}
-            className="hub-qr-object"
+            fallback={<QrCode size={44} />}
+            className="clean-hub-qr"
             onClick={onScanner}
           />
 
           <HubObject
             label="Mi álbum"
             imageSrc="/images/hub/album.png"
-            fallback={<BookOpen size={76} />}
-            className="hub-album-object"
+            fallback={<BookOpen size={72} />}
+            className="clean-hub-album"
             onClick={onExplore}
           />
 
           <HubObject
             label="Abrir sobre"
             imageSrc="/images/hub/sobre.png"
-            fallback={<PackageOpen size={66} />}
-            className="hub-pack-object"
+            fallback={<PackageOpen size={50} />}
+            className="clean-hub-pack"
             onClick={onOpenPack}
           />
 
           <HubObject
             label="Mapa de la ciudad"
             imageSrc="/images/hub/mapa-ciudad.png"
-            fallback={<Map size={66} />}
-            className="hub-map-object"
+            fallback={<Map size={50} />}
+            className="clean-hub-map"
             onClick={onMap}
           />
 
           <HubObject
             label="Mis figuritas"
             imageSrc="/images/hub/mis-figuritas.png"
-            fallback={<Image size={64} />}
-            className="hub-stickers-object"
+            fallback={<Image size={50} />}
+            className="clean-hub-stickers"
             onClick={onExplore}
           />
         </div>
 
-        <footer className="artistic-hub-footer">
+        <footer className="clean-hub-footer">
           <span>Explorá</span>
           <span>Escaneá</span>
           <span>Abrí sobres</span>
