@@ -54,7 +54,7 @@ async function tryFullscreenLandscape() {
       await orientation.lock("landscape");
     }
   } catch {
-    // Navegadores móviles pueden bloquear esto si no es PWA instalada.
+    // El navegador puede bloquear esto si no está instalada como PWA.
   }
 }
 
@@ -138,7 +138,6 @@ export default function App() {
         completed={completed}
         total={albumCards.length}
         percent={percent}
-        onBackToCover={() => setView("index")}
         onExplore={() => setView("section")}
         onOpenPack={() => {
           setLastPackCard(null);

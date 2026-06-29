@@ -4130,3 +4130,427 @@ body {
     height: clamp(140px, 24vh, 230px);
   }
 }
+
+/* ============================================================
+   HUB FINAL RESPONSIVE 16:9 - SIN SUPERPOSICIONES NI SCROLL
+   ============================================================ */
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow: hidden;
+}
+
+.clean-hub-screen {
+  width: 100vw;
+  height: 100svh;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(255, 209, 102, .18), transparent 24%),
+    radial-gradient(circle at 80% 20%, rgba(89, 190, 210, .18), transparent 24%),
+    linear-gradient(135deg, #efe1c8, #d9eef0 45%, #f5e7c9);
+}
+
+.clean-hub-stage {
+  position: relative;
+  width: min(100vw, calc(100svh * 1.777));
+  height: min(100svh, calc(100vw / 1.777));
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: clamp(0px, 1.8vw, 28px);
+  border: 3px solid rgba(31, 70, 82, .18);
+  background: #d9eef0;
+  box-shadow: 0 24px 70px rgba(45, 42, 34, .22);
+}
+
+.clean-hub-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04)),
+    url("/images/hub/hub-bg.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.clean-hub-header {
+  position: absolute;
+  z-index: 5;
+  top: 3%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.clean-hub-header span {
+  padding: .38em 1em;
+  border-radius: 999px;
+  background: rgba(255, 248, 229, .82);
+  color: #164f5e;
+  font-size: clamp(.48rem, .9vw, .76rem);
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.clean-hub-header h1 {
+  margin: .12em 0 0;
+  color: #133c52;
+  font-size: clamp(1.7rem, 4.6vw, 4rem);
+  line-height: .82;
+  letter-spacing: -.08em;
+  text-shadow: 0 3px 0 rgba(255,255,255,.68);
+}
+
+.clean-hub-header p {
+  margin: .16em 0 0;
+  color: #546863;
+  font-size: clamp(.62rem, 1.15vw, .95rem);
+  font-weight: 850;
+}
+
+.clean-hub-progress {
+  width: 62%;
+  height: clamp(6px, .9vw, 12px);
+  margin-top: .65em;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(19, 60, 82, .13);
+  border: 1px solid rgba(19, 60, 82, .14);
+}
+
+.clean-hub-progress div {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #2c8fa3, #8acb55, #ffd166);
+}
+
+.clean-hub-counter {
+  position: absolute;
+  z-index: 6;
+  top: 4.5%;
+  right: 3%;
+  display: grid;
+  place-items: center;
+  min-width: clamp(48px, 6vw, 78px);
+  min-height: clamp(40px, 5vw, 58px);
+  border-radius: clamp(13px, 1.6vw, 20px);
+  background: rgba(19, 60, 82, .92);
+  color: #ffffff;
+  box-shadow: 0 14px 28px rgba(45, 42, 34, .22);
+}
+
+.clean-hub-counter strong {
+  color: #79f5ed;
+  font-size: clamp(.85rem, 1.6vw, 1.25rem);
+}
+
+.clean-hub-counter small {
+  margin-top: -4px;
+  color: rgba(255,255,255,.76);
+  font-size: clamp(.52rem, .9vw, .72rem);
+  font-weight: 900;
+}
+
+.clean-hub-world {
+  position: absolute;
+  z-index: 4;
+  inset: 21% 5% 8%;
+}
+
+.clean-hub-object {
+  position: absolute;
+  display: grid;
+  justify-items: center;
+  gap: clamp(4px, .7vw, 10px);
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: #173f4b;
+  cursor: pointer;
+  transition: transform .16s ease, filter .16s ease;
+}
+
+.clean-hub-object:hover {
+  transform: translateY(-5px);
+  filter: brightness(1.04);
+}
+
+.clean-hub-label {
+  display: inline-flex;
+  width: fit-content;
+  padding: .48em 1em;
+  border: 2px solid rgba(19, 60, 82, .13);
+  border-radius: 999px;
+  background: rgba(255, 248, 229, .9);
+  color: #173f4b;
+  font-size: clamp(.54rem, .95vw, .82rem);
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: .035em;
+  white-space: nowrap;
+  box-shadow: 0 8px 18px rgba(45, 42, 34, .13);
+}
+
+.clean-hub-visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--obj-w);
+  height: var(--obj-h);
+  filter: drop-shadow(0 18px 20px rgba(45, 42, 34, .22));
+}
+
+.clean-hub-visual img {
+  position: relative;
+  z-index: 2;
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.clean-hub-fallback {
+  position: absolute;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 80%;
+  height: 80%;
+  border: 3px solid rgba(19, 60, 82, .16);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 35% 18%, rgba(255,255,255,.72), transparent 34%),
+    linear-gradient(145deg, rgba(255,255,255,.92), rgba(217,238,240,.88));
+  color: #164f5e;
+}
+
+/* Posiciones de escritorio y tablets horizontales */
+.clean-hub-qr {
+  left: 6%;
+  top: 10%;
+  --obj-w: clamp(95px, 14vw, 180px);
+  --obj-h: clamp(95px, 14vw, 180px);
+}
+
+.clean-hub-album {
+  left: 50%;
+  top: 31%;
+  transform: translateX(-50%);
+  --obj-w: clamp(180px, 25vw, 330px);
+  --obj-h: clamp(185px, 29vw, 360px);
+}
+
+.clean-hub-album:hover {
+  transform: translateX(-50%) translateY(-5px);
+}
+
+.clean-hub-pack {
+  right: 8%;
+  top: 8%;
+  --obj-w: clamp(105px, 15vw, 190px);
+  --obj-h: clamp(115px, 16vw, 210px);
+}
+
+.clean-hub-map {
+  left: 8%;
+  bottom: 5%;
+  --obj-w: clamp(135px, 20vw, 260px);
+  --obj-h: clamp(95px, 15vw, 190px);
+}
+
+.clean-hub-stickers {
+  right: 9%;
+  bottom: 7%;
+  --obj-w: clamp(120px, 18vw, 240px);
+  --obj-h: clamp(105px, 16vw, 205px);
+}
+
+.clean-hub-footer {
+  position: absolute;
+  z-index: 6;
+  left: 50%;
+  bottom: 1.4%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: .45em;
+  white-space: nowrap;
+}
+
+.clean-hub-footer span {
+  padding: .36em .8em;
+  border-radius: 999px;
+  background: rgba(255, 248, 229, .64);
+  color: #173f4b;
+  font-size: clamp(.48rem, .82vw, .75rem);
+  font-weight: 950;
+}
+
+/* Celular horizontal */
+@media (orientation: landscape) and (max-height: 520px) {
+  .clean-hub-stage {
+    width: 100vw;
+    height: 100svh;
+    border-radius: 0;
+    border: 0;
+  }
+
+  .clean-hub-header {
+    top: 1.6%;
+    width: 68%;
+  }
+
+  .clean-hub-header h1 {
+    font-size: clamp(1.45rem, 4.6vw, 2.8rem);
+  }
+
+  .clean-hub-header p {
+    font-size: .68rem;
+  }
+
+  .clean-hub-progress {
+    width: 56%;
+    height: 7px;
+    margin-top: .38em;
+  }
+
+  .clean-hub-counter {
+    top: 2.2%;
+    right: 2%;
+    min-width: 52px;
+    min-height: 42px;
+  }
+
+  .clean-hub-world {
+    inset: 18% 4% 7%;
+  }
+
+  .clean-hub-label {
+    font-size: .56rem;
+    padding: .42em .85em;
+  }
+
+  .clean-hub-qr {
+    left: 7%;
+    top: 5%;
+    --obj-w: 105px;
+    --obj-h: 105px;
+  }
+
+  .clean-hub-album {
+    top: 26%;
+    --obj-w: 205px;
+    --obj-h: 210px;
+  }
+
+  .clean-hub-pack {
+    right: 8%;
+    top: 4%;
+    --obj-w: 115px;
+    --obj-h: 125px;
+  }
+
+  .clean-hub-map {
+    left: 8%;
+    bottom: 3%;
+    --obj-w: 160px;
+    --obj-h: 112px;
+  }
+
+  .clean-hub-stickers {
+    right: 9%;
+    bottom: 3%;
+    --obj-w: 145px;
+    --obj-h: 125px;
+  }
+
+  .clean-hub-footer {
+    bottom: .8%;
+  }
+
+  .clean-hub-footer span {
+    font-size: .52rem;
+    padding: .3em .7em;
+  }
+}
+
+/* Celular horizontal muy bajo */
+@media (orientation: landscape) and (max-height: 390px) {
+  .clean-hub-header p {
+    display: none;
+  }
+
+  .clean-hub-header h1 {
+    font-size: clamp(1.35rem, 4.3vw, 2.45rem);
+  }
+
+  .clean-hub-world {
+    inset: 16% 4% 7%;
+  }
+
+  .clean-hub-qr {
+    --obj-w: 88px;
+    --obj-h: 88px;
+  }
+
+  .clean-hub-album {
+    top: 24%;
+    --obj-w: 175px;
+    --obj-h: 180px;
+  }
+
+  .clean-hub-pack {
+    --obj-w: 96px;
+    --obj-h: 108px;
+  }
+
+  .clean-hub-map {
+    --obj-w: 135px;
+    --obj-h: 96px;
+  }
+
+  .clean-hub-stickers {
+    --obj-w: 122px;
+    --obj-h: 104px;
+  }
+}
+
+/* Escritorio grande: evitar iconos gigantes */
+@media (min-width: 1200px) and (min-height: 700px) {
+  .clean-hub-qr {
+    --obj-w: 160px;
+    --obj-h: 160px;
+  }
+
+  .clean-hub-album {
+    --obj-w: 300px;
+    --obj-h: 330px;
+  }
+
+  .clean-hub-pack {
+    --obj-w: 170px;
+    --obj-h: 190px;
+  }
+
+  .clean-hub-map {
+    --obj-w: 240px;
+    --obj-h: 170px;
+  }
+
+  .clean-hub-stickers {
+    --obj-w: 210px;
+    --obj-h: 180px;
+  }
+}
