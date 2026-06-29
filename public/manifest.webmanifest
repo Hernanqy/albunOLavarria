@@ -1,0 +1,10 @@
+﻿{
+  "name": "Olavarría en Figuritas",
+  "short_name": "Figuritas",
+  "start_url": "/",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#d9eef0",
+  "theme_color": "#d9eef0",
+  "icons": []
+}

@@ -22,15 +22,11 @@ function readInitialPastedIds() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
 
-    if (!saved) {
-      return starterPastedIds;
-    }
+    if (!saved) return starterPastedIds;
 
     const parsed = JSON.parse(saved);
 
-    if (!Array.isArray(parsed)) {
-      return starterPastedIds;
-    }
+    if (!Array.isArray(parsed)) return starterPastedIds;
 
     const validIds = parsed.filter((id) =>
       albumCards.some((card) => card.id === id)
@@ -42,8 +38,14 @@ function readInitialPastedIds() {
   }
 }
 
-async function tryLandscapeMode() {
+async function tryFullscreenLandscape() {
   try {
+    const element = document.documentElement;
+
+    if (!document.fullscreenElement && element.requestFullscreen) {
+      await element.requestFullscreen();
+    }
+
     const orientation = screen.orientation as ScreenOrientation & {
       lock?: (orientation: OrientationLockType) => Promise<void>;
     };
@@ -52,7 +54,7 @@ async function tryLandscapeMode() {
       await orientation.lock("landscape");
     }
   } catch {
-    // Algunos navegadores solo permiten bloquear orientación en pantalla completa o como PWA instalada.
+    // Navegadores móviles pueden bloquear esto si no es PWA instalada.
   }
 }
 
@@ -68,7 +70,22 @@ export default function App() {
   }, [pastedIds]);
 
   useEffect(() => {
-    tryLandscapeMode();
+    const start = () => {
+      tryFullscreenLandscape();
+      window.removeEventListener("pointerdown", start);
+      window.removeEventListener("touchstart", start);
+      window.removeEventListener("click", start);
+    };
+
+    window.addEventListener("pointerdown", start, { once: true });
+    window.addEventListener("touchstart", start, { once: true });
+    window.addEventListener("click", start, { once: true });
+
+    return () => {
+      window.removeEventListener("pointerdown", start);
+      window.removeEventListener("touchstart", start);
+      window.removeEventListener("click", start);
+    };
   }, []);
 
   const completed = pastedIds.length;
@@ -105,15 +122,11 @@ export default function App() {
   function scanCode(code: string) {
     const cardId = qrCodes[code];
 
-    if (!cardId) {
-      return null;
-    }
+    if (!cardId) return null;
 
     const card = albumCards.find((item) => item.id === cardId);
 
-    if (!card) {
-      return null;
-    }
+    if (!card) return null;
 
     pasteCard(card);
     return card;
