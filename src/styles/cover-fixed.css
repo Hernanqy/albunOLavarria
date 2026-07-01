@@ -8745,3 +8745,296 @@ body {
     font-size: .95rem !important;
   }
 }
+
+/* ============================================================
+   FIX - QUITAR GIRO FALSO EN CELULAR
+   El giro visual rompe Safari/iPhone. La app queda usable.
+   ============================================================ */
+
+@media (orientation: portrait) and (max-width: 760px) {
+  .forced-landscape-shell {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    transform: none !important;
+    transform-origin: center !important;
+    overflow: hidden !important;
+  }
+
+  .forced-landscape-shell .clean-hub-screen,
+  .forced-landscape-shell .new-pack-screen,
+  .forced-landscape-shell .real-album-screen,
+  .forced-landscape-shell .scanner-screen,
+  .forced-landscape-shell .map-screen {
+    width: 100vw !important;
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+  }
+
+  .forced-landscape-shell .clean-hub-stage,
+  .forced-landscape-shell .new-pack-stage {
+    width: 100vw !important;
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    border-radius: 0 !important;
+    border: 0 !important;
+    aspect-ratio: auto !important;
+  }
+}
+
+/* ============================================================
+   HUB VERTICAL USABLE EN IPHONE
+   ============================================================ */
+
+@media (orientation: portrait) and (max-width: 760px) {
+  .clean-hub-header {
+    top: 2% !important;
+    width: 90% !important;
+  }
+
+  .clean-hub-header h1 {
+    font-size: clamp(2rem, 8vw, 2.8rem) !important;
+    line-height: .86 !important;
+  }
+
+  .clean-hub-header p {
+    font-size: .74rem !important;
+  }
+
+  .clean-hub-progress {
+    width: 48% !important;
+    height: 7px !important;
+    margin-top: 38px !important;
+  }
+
+  .clean-hub-world {
+    inset: 18% 0 4% !important;
+  }
+
+  .clean-hub-qr {
+    left: 7% !important;
+    top: 0 !important;
+    --obj-w: 86px !important;
+    --obj-h: 86px !important;
+  }
+
+  .clean-hub-stickers {
+    right: 7% !important;
+    top: 0 !important;
+    --obj-w: 95px !important;
+    --obj-h: 88px !important;
+  }
+
+  .clean-hub-album {
+    left: 50% !important;
+    top: 28% !important;
+    transform: translateX(-50%) !important;
+    --obj-w: 220px !important;
+    --obj-h: 260px !important;
+  }
+
+  .clean-hub-pack {
+    left: 7% !important;
+    bottom: 4% !important;
+    right: auto !important;
+    top: auto !important;
+    --obj-w: 96px !important;
+    --obj-h: 110px !important;
+  }
+
+  .clean-hub-map {
+    right: 5% !important;
+    bottom: 4% !important;
+    left: auto !important;
+    top: auto !important;
+    --obj-w: 140px !important;
+    --obj-h: 100px !important;
+  }
+
+  .clean-hub-footer {
+    display: none !important;
+  }
+}
+
+/* ============================================================
+   ALBUM HORIZONTAL MAS GRANDE Y ESTABLE
+   ============================================================ */
+
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1000px) {
+  .real-album-stage {
+    width: 84vw !important;
+    height: 68dvh !important;
+    max-width: 860px !important;
+    max-height: 360px !important;
+    transform: translateY(-4px) !important;
+  }
+
+  .real-album-spread {
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .real-album-page {
+    padding: 9px !important;
+    gap: 6px !important;
+    overflow: hidden !important;
+  }
+
+  .real-page-header span {
+    font-size: .46rem !important;
+    padding: 4px 8px !important;
+  }
+
+  .real-page-header h1 {
+    font-size: 1.28rem !important;
+    line-height: .9 !important;
+    margin-top: 3px !important;
+  }
+
+  .real-page-header p {
+    display: none !important;
+  }
+
+  .real-sticker-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .real-sticker-slot {
+    padding: 4px !important;
+    border-radius: 9px !important;
+    overflow: hidden !important;
+    transform: none !important;
+  }
+
+  .real-album-nav {
+    bottom: 4px !important;
+  }
+
+  .real-album-section-pill {
+    min-width: 185px !important;
+    padding: 7px 15px !important;
+  }
+
+  .real-album-section-pill strong {
+    font-size: .76rem !important;
+  }
+
+  .real-album-section-pill span {
+    font-size: .54rem !important;
+  }
+
+  .after-paste-panel {
+    width: 200px !important;
+    right: 8px !important;
+    top: 8px !important;
+    padding: 9px !important;
+  }
+}
+
+/* iPhone horizontal con barra alta de Safari */
+@media (orientation: landscape) and (max-height: 430px) and (max-width: 950px) {
+  .real-album-stage {
+    width: 82vw !important;
+    height: 62dvh !important;
+    max-height: 285px !important;
+  }
+
+  .real-page-header h1 {
+    font-size: 1.08rem !important;
+  }
+
+  .real-sticker-grid {
+    gap: 5px !important;
+  }
+
+  .real-album-page {
+    padding: 7px !important;
+  }
+}
+
+/* ============================================================
+   FIGURITAS PEGADAS COMPLETAS
+   ============================================================ */
+
+.real-sticker-slot.pasted,
+.real-sticker-slot.just-pasted,
+.real-sticker-slot.locked-pop {
+  display: grid !important;
+  grid-template-rows: 1fr !important;
+  padding: 4px !important;
+  overflow: hidden !important;
+  transform: none !important;
+  box-sizing: border-box !important;
+}
+
+.real-sticker-slot.pasted .real-sticker-image,
+.real-sticker-slot.just-pasted .real-sticker-image,
+.real-sticker-slot.locked-pop .real-sticker-image,
+.real-sticker-slot.pasted .pasted-image,
+.real-sticker-slot.just-pasted .pasted-image,
+.real-sticker-slot.locked-pop .pasted-image {
+  position: relative !important;
+  inset: auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  display: grid !important;
+  place-items: center !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  border-radius: 8px !important;
+}
+
+.real-sticker-slot.pasted .real-sticker-image img,
+.real-sticker-slot.just-pasted .real-sticker-image img,
+.real-sticker-slot.locked-pop .real-sticker-image img,
+.real-sticker-slot.pasted .pasted-image img,
+.real-sticker-slot.just-pasted .pasted-image img,
+.real-sticker-slot.locked-pop .pasted-image img {
+  width: auto !important;
+  height: auto !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  display: block !important;
+  background: transparent !important;
+  filter: drop-shadow(0 5px 6px rgba(0,0,0,.14)) !important;
+}
+
+.real-sticker-slot.pasted > strong,
+.real-sticker-slot.just-pasted > strong,
+.real-sticker-slot.locked-pop > strong,
+.real-sticker-slot.pasted > small,
+.real-sticker-slot.just-pasted > small,
+.real-sticker-slot.locked-pop > small {
+  display: none !important;
+}
+
+/* ============================================================
+   FIX ICONOS HUB - QUE NO DESAPAREZCAN
+   ============================================================ */
+
+.clean-hub-visual {
+  display: grid !important;
+  place-items: center !important;
+  overflow: visible !important;
+}
+
+.clean-hub-visual img {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+}
