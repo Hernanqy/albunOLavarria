@@ -4,6 +4,7 @@ import App from "./App";
 import { registerServiceWorker } from "./registerServiceWorker";
 import "./styles/globals.css";
 import "./styles/cover-fixed.css";
+import "./styles/final-mobile-fixes.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
