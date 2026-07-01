@@ -1,4 +1,4 @@
-﻿const ALBUM_DEV_RESET_KEYS = [
+﻿const ALBUM_RESET_KEYS = [
   "olavarria-en-figuritas-pasted-ids-v3",
   "olavarria-en-figuritas-duplicates-v3",
   "olavarria-en-figuritas-inventory-v3",
@@ -6,13 +6,16 @@
 ];
 
 export function resetAlbumOnDevStart() {
-  if (!import.meta.env.DEV) return;
-
-  for (const key of ALBUM_DEV_RESET_KEYS) {
+  /**
+   * MODO DESARROLLO TEMPORAL:
+   * Resetea SIEMPRE, también en Vercel.
+   * Cuando terminemos de probar, sacamos esta función del main.tsx.
+   */
+  for (const key of ALBUM_RESET_KEYS) {
     localStorage.removeItem(key);
   }
 
-  sessionStorage.removeItem("olavarria-dev-reset-done");
+  sessionStorage.clear();
 
-  console.info("🧹 Álbum reiniciado automáticamente en desarrollo");
+  console.info("🧹 Álbum reiniciado automáticamente para pruebas");
 }
