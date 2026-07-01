@@ -8513,3 +8513,235 @@ body {
     height: min(74vh, 440px) !important;
   }
 }
+
+/* ============================================================
+   FIX FINAL - FIGURITA PEGADA COMPLETA SIN ROMPER EL ALBUM
+   ============================================================ */
+
+/* El casillero mantiene tamaño fijo */
+.real-sticker-slot.pasted,
+.real-sticker-slot.just-pasted,
+.real-sticker-slot.locked-pop {
+  position: relative !important;
+  overflow: hidden !important;
+  transform: none !important;
+  display: block !important;
+  padding: 4px !important;
+  box-sizing: border-box !important;
+}
+
+/* La imagen ocupa el casillero sin recortarse */
+.real-sticker-slot.pasted .real-sticker-image,
+.real-sticker-slot.just-pasted .real-sticker-image,
+.real-sticker-slot.locked-pop .real-sticker-image,
+.real-sticker-slot.pasted .pasted-image,
+.real-sticker-slot.just-pasted .pasted-image,
+.real-sticker-slot.locked-pop .pasted-image {
+  position: absolute !important;
+  inset: 4px !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+  display: grid !important;
+  place-items: center !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  border-radius: 8px !important;
+}
+
+/* El PNG siempre completo, nunca cortado */
+.real-sticker-slot.pasted .real-sticker-image img,
+.real-sticker-slot.just-pasted .real-sticker-image img,
+.real-sticker-slot.locked-pop .real-sticker-image img,
+.real-sticker-slot.pasted .pasted-image img,
+.real-sticker-slot.just-pasted .pasted-image img,
+.real-sticker-slot.locked-pop .pasted-image img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  background: transparent !important;
+  filter: drop-shadow(0 5px 6px rgba(0,0,0,.14)) !important;
+}
+
+/* Sacamos textos del sistema porque la figurita PNG ya trae su diseño */
+.real-sticker-slot.pasted > strong,
+.real-sticker-slot.just-pasted > strong,
+.real-sticker-slot.locked-pop > strong,
+.real-sticker-slot.pasted > small,
+.real-sticker-slot.just-pasted > small,
+.real-sticker-slot.locked-pop > small {
+  display: none !important;
+}
+
+/* El efecto de pegado ocurre dentro, no sobre el casillero */
+.real-sticker-slot.just-pasted .real-sticker-image,
+.real-sticker-slot.locked-pop .real-sticker-image {
+  animation: stickerPasteInsideOnly .58s cubic-bezier(.2, 1.25, .35, 1) both !important;
+}
+
+@keyframes stickerPasteInsideOnly {
+  0% {
+    opacity: 0;
+    transform: scale(.58) rotate(-4deg);
+  }
+
+  62% {
+    opacity: 1;
+    transform: scale(1.04) rotate(1deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* ============================================================
+   IPHONE HORIZONTAL - ALBUM COMPLETO A LA VISTA
+   ============================================================ */
+
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1000px) {
+  .real-album-stage {
+    width: 72vw !important;
+    height: 56dvh !important;
+    max-width: 720px !important;
+    max-height: 290px !important;
+    transform: translateY(-4px) !important;
+  }
+
+  .real-album-spread {
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .real-album-page {
+    padding: 7px !important;
+    gap: 4px !important;
+    overflow: hidden !important;
+  }
+
+  .real-page-header span {
+    font-size: .42rem !important;
+    padding: 3px 7px !important;
+  }
+
+  .real-page-header h1 {
+    font-size: 1.05rem !important;
+    margin-top: 3px !important;
+    line-height: .9 !important;
+  }
+
+  .real-page-header p {
+    display: none !important;
+  }
+
+  .real-section-progress {
+    padding: 3px 7px !important;
+    font-size: .56rem !important;
+  }
+
+  .real-sticker-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+    gap: 5px !important;
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .real-sticker-slot {
+    border-radius: 8px !important;
+    padding: 3px !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .real-sticker-slot.pasted .real-sticker-image,
+  .real-sticker-slot.just-pasted .real-sticker-image,
+  .real-sticker-slot.locked-pop .real-sticker-image,
+  .real-sticker-slot.pasted .pasted-image,
+  .real-sticker-slot.just-pasted .pasted-image,
+  .real-sticker-slot.locked-pop .pasted-image {
+    inset: 3px !important;
+  }
+
+  .real-empty-number {
+    width: 30px !important;
+    height: 30px !important;
+    font-size: .9rem !important;
+  }
+
+  .real-sticker-slot em {
+    font-size: .42rem !important;
+  }
+
+  .real-album-back {
+    width: 40px !important;
+    height: 40px !important;
+    left: 8px !important;
+    top: 8px !important;
+  }
+
+  .real-album-nav {
+    bottom: 4px !important;
+    gap: 7px !important;
+  }
+
+  .real-album-nav button {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .real-album-section-pill {
+    min-width: 168px !important;
+    padding: 7px 13px !important;
+  }
+
+  .real-album-section-pill strong {
+    font-size: .72rem !important;
+  }
+
+  .real-album-section-pill span {
+    font-size: .52rem !important;
+  }
+
+  .after-paste-panel {
+    width: 190px !important;
+    right: 7px !important;
+    top: 7px !important;
+    padding: 8px !important;
+    gap: 6px !important;
+  }
+
+  .after-paste-panel button {
+    min-height: 29px !important;
+    font-size: .61rem !important;
+  }
+}
+
+/* iPhone muy bajo con barra de Safari */
+@media (orientation: landscape) and (max-height: 430px) and (max-width: 950px) {
+  .real-album-stage {
+    width: 70vw !important;
+    height: 52dvh !important;
+    max-height: 235px !important;
+  }
+
+  .real-sticker-grid {
+    gap: 4px !important;
+  }
+
+  .real-album-page {
+    padding: 6px !important;
+  }
+
+  .real-page-header h1 {
+    font-size: .95rem !important;
+  }
+}
