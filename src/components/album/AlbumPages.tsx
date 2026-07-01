@@ -179,7 +179,9 @@ export function AlbumPages({
         {(pasted || isJustPasted) ? (
           <>
             <div className="real-sticker-image pasted-image">
-              {renderStickerImage(card)}
+              <div className="real-sticker-art">
+                {renderStickerImage(card)}
+              </div>
             </div>
 
             <strong>{card.title}</strong>
@@ -309,3 +311,4 @@ export function AlbumPages({
     </main>
   );
 }
+

@@ -1,0 +1,396 @@
+﻿/* ============================================================
+   ALBUM MOBILE FINAL - VERSIÓN LIMPIA
+   Objetivo:
+   - Sin giro falso
+   - Álbum más grande en horizontal
+   - Figuritas completas dentro del casillero
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   ANULAR GIRO FALSO
+   ------------------------------------------------------------ */
+
+.forced-landscape-shell {
+  width: 100vw !important;
+  height: 100dvh !important;
+  transform: none !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* ------------------------------------------------------------
+   HUB EN VERTICAL: QUE NO QUEDE CONGELADO NI GIRADO
+   ------------------------------------------------------------ */
+
+@media (orientation: portrait) and (max-width: 760px) {
+  html,
+  body,
+  #root {
+    width: 100vw !important;
+    height: 100dvh !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    background: #d9eef0 !important;
+  }
+
+  body {
+    position: fixed !important;
+    inset: 0 !important;
+  }
+
+  .clean-hub-screen,
+  .clean-hub-stage {
+    width: 100vw !important;
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    aspect-ratio: auto !important;
+    overflow: hidden !important;
+  }
+
+  .clean-hub-header {
+    top: 2% !important;
+    width: 92% !important;
+  }
+
+  .clean-hub-header h1 {
+    font-size: clamp(1.9rem, 8vw, 2.75rem) !important;
+    line-height: .86 !important;
+  }
+
+  .clean-hub-world {
+    inset: 18% 0 4% !important;
+  }
+
+  .clean-hub-qr {
+    left: 7% !important;
+    top: 0 !important;
+    --obj-w: 86px !important;
+    --obj-h: 86px !important;
+  }
+
+  .clean-hub-stickers {
+    right: 7% !important;
+    top: 0 !important;
+    --obj-w: 96px !important;
+    --obj-h: 88px !important;
+  }
+
+  .clean-hub-album {
+    left: 50% !important;
+    top: 28% !important;
+    transform: translateX(-50%) !important;
+    --obj-w: 225px !important;
+    --obj-h: 265px !important;
+  }
+
+  .clean-hub-pack {
+    left: 7% !important;
+    bottom: 4% !important;
+    right: auto !important;
+    top: auto !important;
+    --obj-w: 98px !important;
+    --obj-h: 112px !important;
+  }
+
+  .clean-hub-map {
+    right: 5% !important;
+    bottom: 4% !important;
+    left: auto !important;
+    top: auto !important;
+    --obj-w: 145px !important;
+    --obj-h: 104px !important;
+  }
+
+  .clean-hub-footer {
+    display: none !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   ÁLBUM HORIZONTAL CELULAR
+   ------------------------------------------------------------ */
+
+@media (orientation: landscape) and (max-width: 1000px) and (max-height: 560px) {
+  .real-album-screen {
+    width: 100vw !important;
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+  }
+
+  .real-album-stage {
+    width: 90vw !important;
+    height: 74dvh !important;
+    max-width: 940px !important;
+    max-height: 400px !important;
+    transform: translateY(-2px) !important;
+  }
+
+  .real-album-spread {
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    border-radius: 14px !important;
+  }
+
+  .real-album-page {
+    display: grid !important;
+    grid-template-rows: auto minmax(0, 1fr) !important;
+    padding: 8px !important;
+    gap: 6px !important;
+    overflow: hidden !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+  }
+
+  .real-page-header span {
+    font-size: .42rem !important;
+    padding: 3px 7px !important;
+  }
+
+  .real-page-header h1 {
+    font-size: 1.08rem !important;
+    line-height: .9 !important;
+    margin: 3px 0 0 !important;
+  }
+
+  .real-page-header p {
+    display: none !important;
+  }
+
+  .real-section-progress {
+    justify-self: end !important;
+    padding: 3px 7px !important;
+    font-size: .55rem !important;
+  }
+
+  .real-sticker-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    align-items: stretch !important;
+  }
+
+  .real-sticker-slot {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    padding: 3px !important;
+    overflow: hidden !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+    contain: layout paint !important;
+    border-radius: 9px !important;
+  }
+
+  .real-sticker-slot.pasted,
+  .real-sticker-slot.just-pasted,
+  .real-sticker-slot.locked-pop {
+    display: grid !important;
+    grid-template-rows: minmax(0, 1fr) !important;
+    background: rgba(255, 255, 255, .48) !important;
+  }
+
+  .real-sticker-slot.pasted > strong,
+  .real-sticker-slot.pasted > small,
+  .real-sticker-slot.just-pasted > strong,
+  .real-sticker-slot.just-pasted > small,
+  .real-sticker-slot.locked-pop > strong,
+  .real-sticker-slot.locked-pop > small {
+    display: none !important;
+  }
+
+  .real-sticker-image.pasted-image {
+    position: absolute !important;
+    inset: 3px !important;
+    width: auto !important;
+    height: auto !important;
+    display: grid !important;
+    place-items: center !important;
+    overflow: hidden !important;
+    background: transparent !important;
+    border-radius: 7px !important;
+  }
+
+  .real-sticker-art {
+    width: auto !important;
+    height: 100% !important;
+    aspect-ratio: 2 / 3 !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    display: grid !important;
+    place-items: center !important;
+    overflow: visible !important;
+  }
+
+  .real-sticker-art img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    background: transparent !important;
+    filter: drop-shadow(0 5px 6px rgba(0,0,0,.16)) !important;
+  }
+
+  .real-empty-number {
+    width: 30px !important;
+    height: 30px !important;
+    font-size: .9rem !important;
+  }
+
+  .real-sticker-slot em {
+    font-size: .42rem !important;
+  }
+
+  .real-album-back {
+    width: 40px !important;
+    height: 40px !important;
+    left: 8px !important;
+    top: 8px !important;
+  }
+
+  .real-album-nav {
+    bottom: 3px !important;
+    gap: 8px !important;
+  }
+
+  .real-album-nav button {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .real-album-section-pill {
+    min-width: 178px !important;
+    padding: 7px 14px !important;
+  }
+
+  .real-album-section-pill strong {
+    font-size: .72rem !important;
+  }
+
+  .real-album-section-pill span {
+    font-size: .52rem !important;
+  }
+
+  .after-paste-panel {
+    width: 198px !important;
+    right: 8px !important;
+    top: 8px !important;
+    padding: 8px !important;
+    gap: 6px !important;
+    border-radius: 18px !important;
+  }
+
+  .after-paste-panel button {
+    min-height: 29px !important;
+    font-size: .62rem !important;
+  }
+}
+
+/* iPhone horizontal con barra grande */
+@media (orientation: landscape) and (max-width: 950px) and (max-height: 430px) {
+  .real-album-stage {
+    width: 90vw !important;
+    height: 70dvh !important;
+    max-height: 320px !important;
+  }
+
+  .real-album-page {
+    padding: 7px !important;
+    gap: 5px !important;
+  }
+
+  .real-page-header h1 {
+    font-size: .98rem !important;
+  }
+
+  .real-page-header span {
+    font-size: .38rem !important;
+  }
+
+  .real-sticker-grid {
+    gap: 5px !important;
+  }
+
+  .real-sticker-slot {
+    padding: 3px !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   PEGADO E INDICADOR
+   ------------------------------------------------------------ */
+
+.real-sticker-slot.just-pasted .real-sticker-art,
+.real-sticker-slot.locked-pop .real-sticker-art {
+  animation: stickerArtPop .58s cubic-bezier(.2, 1.25, .35, 1) both !important;
+}
+
+@keyframes stickerArtPop {
+  0% {
+    opacity: 0;
+    transform: scale(.58) rotate(-4deg);
+  }
+
+  62% {
+    opacity: 1;
+    transform: scale(1.04) rotate(1deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.real-sticker-slot.force-visible-target {
+  border: 3px solid #ffd166 !important;
+  transform: none !important;
+  overflow: hidden !important;
+  animation: pasteGlowFinal .95s ease-in-out infinite !important;
+}
+
+@keyframes pasteGlowFinal {
+  0%, 100% {
+    box-shadow:
+      inset 0 0 0 2px rgba(255,255,255,.55),
+      0 0 0 0 rgba(255, 209, 102, .42);
+  }
+
+  50% {
+    box-shadow:
+      inset 0 0 0 2px rgba(255,255,255,.8),
+      0 0 20px 5px rgba(255, 209, 102, .32);
+  }
+}
+
+.paste-target-big-indicator {
+  min-width: 64px !important;
+  padding: 7px 9px !important;
+  border-radius: 14px !important;
+}
+
+.paste-target-big-indicator strong {
+  font-size: .5rem !important;
+}
+
+.ghost-sticker-preview {
+  width: 80% !important;
+  height: 80% !important;
+  object-fit: contain !important;
+  opacity: .16 !important;
+}
