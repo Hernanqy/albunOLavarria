@@ -1,4 +1,4 @@
-﻿const CACHE_NAME = "olavarria-en-figuritas-v5";
+﻿const CACHE_NAME = "olavarria-en-figuritas-v11";
 
 self.addEventListener("install", () => {
   self.skipWaiting();

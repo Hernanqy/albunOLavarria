@@ -6894,3 +6894,1130 @@ body {
     }
   }
 }
+
+/* ============================================================
+   CONFETI SIMPLE Y VISIBLE - FIX
+   ============================================================ */
+
+.new-confetti,
+.new-confetti-burst {
+  display: none !important;
+}
+
+.simple-confetti-layer {
+  position: absolute;
+  z-index: 999;
+  left: 50%;
+  top: 46%;
+  width: 1px;
+  height: 1px;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.simple-confetti-layer::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  background: radial-gradient(circle, #ffffff 0 12%, #ffd166 13% 32%, rgba(255,209,102,.22) 33% 70%, transparent 71%);
+  box-shadow:
+    0 0 26px rgba(255,209,102,.95),
+    0 0 54px rgba(54,216,200,.65);
+  transform: translate(-50%, -50%) scale(.2);
+  animation: simplePackFlash .62s ease-out forwards;
+}
+
+.simple-confetti-piece {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  width: var(--size);
+  height: calc(var(--size) * 1.55);
+  background: var(--confetti-color);
+  border-radius: 3px;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(.3);
+  box-shadow:
+    0 0 8px rgba(255,255,255,.3),
+    0 8px 12px rgba(0,0,0,.12);
+  animation: simpleConfettiExplosion var(--duration) var(--delay) cubic-bezier(.08,.85,.18,1) forwards;
+}
+
+.simple-confetti-piece.shape-1 {
+  border-radius: 999px;
+}
+
+.simple-confetti-piece.shape-2 {
+  width: calc(var(--size) * 1.8);
+  height: calc(var(--size) * .55);
+  border-radius: 999px;
+}
+
+.simple-confetti-piece.shape-3 {
+  width: calc(var(--size) * 1.15);
+  height: calc(var(--size) * 1.15);
+  transform: translate(-50%, -50%) rotate(45deg) scale(.3);
+}
+
+@keyframes simpleConfettiExplosion {
+  0% {
+    opacity: 0;
+    transform:
+      translate(-50%, -50%)
+      translate(0, 0)
+      rotate(0deg)
+      scale(.25);
+  }
+
+  8% {
+    opacity: 1;
+  }
+
+  30% {
+    opacity: 1;
+    transform:
+      translate(-50%, -50%)
+      translate(var(--x), var(--y))
+      rotate(calc(var(--rotate) * .35))
+      scale(1.08);
+  }
+
+  68% {
+    opacity: .95;
+  }
+
+  100% {
+    opacity: 0;
+    transform:
+      translate(-50%, -50%)
+      translate(calc(var(--x) * .82), calc(var(--y) + var(--fall)))
+      rotate(var(--rotate))
+      scale(.85);
+  }
+}
+
+@keyframes simplePackFlash {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(.2);
+  }
+
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(2.4);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(6);
+  }
+}
+
+.new-pack-stage.opening .new-pack-bg {
+  animation: visiblePackPulse .9s ease-out;
+}
+
+@keyframes visiblePackPulse {
+  0% {
+    filter: brightness(1) saturate(1);
+  }
+
+  26% {
+    filter: brightness(1.16) saturate(1.2);
+  }
+
+  100% {
+    filter: brightness(1) saturate(1);
+  }
+}
+
+@media (max-width: 760px) {
+  .simple-confetti-layer {
+    top: 45%;
+  }
+
+  .simple-confetti-piece {
+    width: calc(var(--size) * .78);
+    height: calc(var(--size) * 1.18);
+  }
+
+  @keyframes simpleConfettiExplosion {
+    0% {
+      opacity: 0;
+      transform:
+        translate(-50%, -50%)
+        translate(0, 0)
+        rotate(0deg)
+        scale(.25);
+    }
+
+    8% {
+      opacity: 1;
+    }
+
+    30% {
+      opacity: 1;
+      transform:
+        translate(-50%, -50%)
+        translate(calc(var(--x) * .55), calc(var(--y) * .72))
+        rotate(calc(var(--rotate) * .35))
+        scale(1);
+    }
+
+    68% {
+      opacity: .95;
+    }
+
+    100% {
+      opacity: 0;
+      transform:
+        translate(-50%, -50%)
+        translate(calc(var(--x) * .42), calc((var(--y) * .72) + (var(--fall) * .72)))
+        rotate(var(--rotate))
+        scale(.82);
+    }
+  }
+}
+
+/* ============================================================
+   SISTEMA DE PEGADO + AJUSTES VISUALES
+   ============================================================ */
+
+.paste-instruction {
+  position: absolute;
+  z-index: 25;
+  top: clamp(10px, 2.2vw, 24px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: rgba(255, 248, 229, .94);
+  color: #173f4b;
+  font-size: clamp(.68rem, 1vw, .9rem);
+  font-weight: 950;
+  box-shadow: 0 14px 24px rgba(0,0,0,.22);
+}
+
+.real-sticker-slot.paste-target {
+  border-color: #ffd166;
+  background:
+    radial-gradient(circle at center, rgba(255, 209, 102, .32), transparent 54%),
+    rgba(255,255,255,.72);
+  animation: pasteTargetPulse 1.15s ease-in-out infinite;
+}
+
+@keyframes pasteTargetPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      inset 0 0 0 2px rgba(255,255,255,.45),
+      0 0 0 0 rgba(255, 209, 102, .6),
+      0 8px 18px rgba(45,42,34,.1);
+  }
+
+  50% {
+    transform: scale(1.035);
+    box-shadow:
+      inset 0 0 0 2px rgba(255,255,255,.65),
+      0 0 0 10px rgba(255, 209, 102, .08),
+      0 14px 24px rgba(45,42,34,.18);
+  }
+}
+
+.paste-target-indicator {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 999px;
+  background: #ffd166;
+  color: #173f4b;
+  box-shadow: 0 0 18px rgba(255, 209, 102, .8);
+}
+
+.real-sticker-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 10px rgba(0,0,0,.16));
+}
+
+.compact-pack-header h1 {
+  display: none !important;
+}
+
+.compact-pack-header {
+  top: 4%;
+}
+
+.compact-pack-header p {
+  margin-top: 8px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(255,248,229,.78);
+}
+
+.new-revealed-sticker {
+  animation:
+    stickerSpring 0.75s cubic-bezier(.2, 1.3, .4, 1) both,
+    stickerIdlePulse 1.8s .8s ease-in-out infinite !important;
+}
+
+@keyframes stickerIdlePulse {
+  0%, 100% {
+    filter: drop-shadow(0 20px 22px rgba(0,0,0,.24));
+  }
+
+  50% {
+    filter: drop-shadow(0 26px 28px rgba(44,143,163,.26));
+  }
+}
+
+.new-revealed-sticker.repeated .new-revealed-image img {
+  filter:
+    grayscale(.18)
+    drop-shadow(0 20px 22px rgba(0,0,0,.24));
+}
+
+.repeated-badge {
+  position: absolute;
+  left: 50%;
+  bottom: -28px;
+  transform: translateX(-50%);
+  width: max-content;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(23,63,75,.94);
+  color: #ffd166;
+  font-size: .68rem;
+  font-weight: 950;
+  box-shadow: 0 10px 18px rgba(0,0,0,.22);
+}
+
+/* Dorso creativo */
+.sticker-modal-status.duplicate {
+  background: rgba(255, 209, 102, .95);
+  color: #173f4b;
+}
+
+.clean-front {
+  background: transparent;
+}
+
+.sticker-modal-real-image {
+  object-fit: contain;
+  background: transparent;
+  padding: 0;
+}
+
+.creative-back {
+  padding: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background:
+    radial-gradient(circle at 18% 14%, color-mix(in srgb, var(--card-color) 35%, transparent), transparent 32%),
+    radial-gradient(circle at 85% 76%, rgba(255,209,102,.18), transparent 32%),
+    linear-gradient(145deg, #173f4b, #08111c);
+  color: #eff7fb;
+}
+
+.creative-back-pattern {
+  position: absolute;
+  inset: 0;
+  opacity: .14;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,.8) 0 1px, transparent 1.5px),
+    repeating-linear-gradient(135deg, transparent 0 16px, rgba(255,255,255,.28) 17px 18px);
+  background-size: 22px 22px, 80px 80px;
+}
+
+.creative-back-header,
+.creative-back-body,
+.creative-back-footer {
+  position: relative;
+  z-index: 2;
+}
+
+.creative-back-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 18px 18px 0;
+}
+
+.creative-back-header span,
+.creative-back-header strong {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 11px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.1);
+  color: rgba(255,255,255,.9);
+  font-size: .76rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.creative-back-body {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 12px;
+  padding: 14px 22px;
+  text-align: center;
+}
+
+.creative-back-icon {
+  display: grid;
+  width: 78px;
+  height: 78px;
+  place-items: center;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 30% 18%, rgba(255,255,255,.26), transparent 34%),
+    color-mix(in srgb, var(--card-color) 72%, #173f4b);
+  box-shadow: 0 16px 26px rgba(0,0,0,.22);
+}
+
+.creative-back-body h2 {
+  margin: 0;
+  font-size: clamp(1.7rem, 5vw, 2.55rem);
+  line-height: .88;
+  letter-spacing: -.06em;
+}
+
+.creative-back-body p {
+  max-width: 280px;
+  margin: 0;
+  color: rgba(239,247,251,.86);
+  font-size: clamp(.82rem, 2vw, 1rem);
+  line-height: 1.35;
+  font-weight: 750;
+}
+
+.creative-back-footer {
+  display: grid;
+  gap: 8px;
+  padding: 0 18px 18px;
+}
+
+.creative-back-footer div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.86);
+  font-size: .78rem;
+  font-weight: 850;
+}
+
+/* Ajuste album horizontal celular */
+@media (orientation: landscape) and (max-height: 560px) {
+  .real-album-stage {
+    width: 78vw;
+    height: 66svh;
+  }
+
+  .real-album-nav {
+    bottom: 5px;
+  }
+
+  .paste-instruction {
+    top: 6px;
+    font-size: .62rem;
+    padding: 7px 11px;
+  }
+}
+
+@media (max-width: 760px) {
+  .repeated-badge {
+    bottom: -23px;
+    font-size: .58rem;
+  }
+
+  .creative-back-body h2 {
+    font-size: 1.65rem;
+  }
+
+  .creative-back-body p {
+    font-size: .8rem;
+  }
+
+  .creative-back-icon {
+    width: 62px;
+    height: 62px;
+    border-radius: 18px;
+  }
+}
+
+/* ============================================================
+   PEGADO VISIBLE EN CASILLERO DEL ALBUM
+   ============================================================ */
+
+.real-sticker-slot {
+  position: relative;
+}
+
+.real-sticker-slot.paste-target {
+  overflow: visible;
+  z-index: 12;
+  border-color: #ffd166 !important;
+  background:
+    radial-gradient(circle at center, rgba(255, 209, 102, .38), transparent 56%),
+    rgba(255,255,255,.8) !important;
+  animation: pasteSlotPulseStrong 1.05s ease-in-out infinite;
+}
+
+@keyframes pasteSlotPulseStrong {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      inset 0 0 0 2px rgba(255,255,255,.5),
+      0 0 0 0 rgba(255, 209, 102, .55),
+      0 8px 18px rgba(45,42,34,.1);
+  }
+
+  50% {
+    transform: scale(1.055);
+    box-shadow:
+      inset 0 0 0 2px rgba(255,255,255,.8),
+      0 0 0 12px rgba(255, 209, 102, .14),
+      0 16px 28px rgba(45,42,34,.22);
+  }
+}
+
+.paste-target-big-indicator {
+  position: absolute;
+  z-index: 20;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  min-width: 86px;
+  padding: 10px 12px;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,.45), transparent 35%),
+    linear-gradient(145deg, #ffd166, #f09a3e);
+  color: #173f4b;
+  box-shadow:
+    0 12px 24px rgba(45,42,34,.24),
+    0 0 26px rgba(255, 209, 102, .52);
+  transform: translate(-50%, -50%);
+  animation: pasteIndicatorHeartbeat .9s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.paste-target-big-indicator strong {
+  font-size: .68rem;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+@keyframes pasteIndicatorHeartbeat {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+.real-sticker-slot.just-pasted {
+  animation: pastedStickerPop .72s cubic-bezier(.2, 1.35, .35, 1) both;
+  border-color: rgba(255, 209, 102, .9) !important;
+}
+
+@keyframes pastedStickerPop {
+  0% {
+    transform: scale(.72) rotate(-2deg);
+    opacity: .4;
+  }
+
+  55% {
+    transform: scale(1.12) rotate(1deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.pasted-success-flash {
+  position: absolute;
+  z-index: 30;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  width: 56px;
+  height: 56px;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(255, 209, 102, .95);
+  color: #173f4b;
+  box-shadow:
+    0 0 26px rgba(255, 209, 102, .9),
+    0 14px 24px rgba(45,42,34,.2);
+  transform: translate(-50%, -50%);
+  animation: pastedFlashOut .9s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes pastedFlashOut {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(.4);
+  }
+
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.9);
+  }
+}
+
+.real-sticker-image.pasted-image {
+  overflow: visible;
+  background: transparent !important;
+}
+
+.real-sticker-image.pasted-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: transparent;
+  filter: drop-shadow(0 8px 10px rgba(0,0,0,.18));
+}
+
+/* Que el álbum entre mejor en celular horizontal */
+@media (orientation: landscape) and (max-height: 560px) {
+  .real-album-stage {
+    width: 82vw !important;
+    height: 68svh !important;
+  }
+
+  .real-album-page {
+    padding: 9px !important;
+  }
+
+  .real-sticker-grid {
+    gap: 6px !important;
+  }
+
+  .real-sticker-slot {
+    padding: 5px !important;
+  }
+
+  .paste-target-big-indicator {
+    min-width: 70px;
+    padding: 7px 9px;
+  }
+
+  .paste-target-big-indicator strong {
+    font-size: .56rem;
+  }
+}
+
+@media (max-width: 760px) {
+  .paste-target-big-indicator {
+    min-width: 66px;
+    padding: 7px 9px;
+    border-radius: 14px;
+  }
+
+  .paste-target-big-indicator strong {
+    font-size: .54rem;
+  }
+}
+
+/* ============================================================
+   CASILLERO OBJETIVO MUY VISIBLE
+   ============================================================ */
+
+.real-sticker-slot.force-visible-target {
+  position: relative !important;
+  z-index: 50 !important;
+  overflow: visible !important;
+  border: 4px solid #ffd166 !important;
+  outline: 4px solid rgba(255, 209, 102, .35) !important;
+  background:
+    radial-gradient(circle at center, rgba(255, 209, 102, .42), rgba(255,255,255,.86) 62%) !important;
+  animation: forcePastePulse 1s ease-in-out infinite !important;
+}
+
+@keyframes forcePastePulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 0 0 0 rgba(255, 209, 102, .6),
+      0 12px 20px rgba(45, 42, 34, .16);
+  }
+
+  50% {
+    transform: scale(1.08);
+    box-shadow:
+      0 0 0 14px rgba(255, 209, 102, .14),
+      0 18px 34px rgba(45, 42, 34, .24);
+  }
+}
+
+.paste-target-big-indicator {
+  position: absolute !important;
+  z-index: 80 !important;
+  left: 50% !important;
+  top: 50% !important;
+  display: grid !important;
+  justify-items: center !important;
+  gap: 4px !important;
+  min-width: 92px !important;
+  padding: 11px 13px !important;
+  border-radius: 18px !important;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,.5), transparent 35%),
+    linear-gradient(145deg, #ffd166, #f18b31) !important;
+  color: #173f4b !important;
+  box-shadow:
+    0 16px 28px rgba(45,42,34,.28),
+    0 0 30px rgba(255, 209, 102, .75) !important;
+  transform: translate(-50%, -50%) !important;
+  animation: pasteIndicatorHeartbeatForce .8s ease-in-out infinite !important;
+  pointer-events: none !important;
+}
+
+.paste-target-big-indicator strong {
+  font-size: .7rem !important;
+  line-height: 1 !important;
+  text-transform: uppercase !important;
+  letter-spacing: .04em !important;
+}
+
+@keyframes pasteIndicatorHeartbeatForce {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.12);
+  }
+}
+
+.ghost-sticker-preview {
+  position: absolute;
+  z-index: 70;
+  left: 50%;
+  top: 50%;
+  width: 84%;
+  height: 84%;
+  object-fit: contain;
+  opacity: .22;
+  transform: translate(-50%, -50%) rotate(-3deg);
+  pointer-events: none;
+  filter: drop-shadow(0 8px 10px rgba(0,0,0,.18));
+}
+
+.paste-error {
+  background: rgba(125, 22, 40, .94) !important;
+  color: white !important;
+}
+
+/* Después de pegar, que se note claramente */
+.real-sticker-slot.just-pasted {
+  z-index: 60 !important;
+  animation: pastedStickerPopForce .75s cubic-bezier(.2, 1.35, .35, 1) both !important;
+}
+
+@keyframes pastedStickerPopForce {
+  0% {
+    transform: scale(.66) rotate(-4deg);
+    opacity: .35;
+  }
+
+  55% {
+    transform: scale(1.16) rotate(2deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   FIX PEGADO SIN DESORDENAR EL ALBUM
+   ============================================================ */
+
+.real-sticker-grid {
+  align-items: stretch !important;
+}
+
+.real-sticker-slot {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  transform: none !important;
+  box-sizing: border-box !important;
+  contain: layout paint;
+}
+
+.real-sticker-slot.force-visible-target {
+  overflow: hidden !important;
+  z-index: 10 !important;
+  transform: none !important;
+  border: 3px solid #ffd166 !important;
+  outline: none !important;
+  background:
+    radial-gradient(circle at center, rgba(255, 209, 102, .42), rgba(255,255,255,.86) 62%) !important;
+  animation: safeTargetGlow 1s ease-in-out infinite !important;
+}
+
+@keyframes safeTargetGlow {
+  0%, 100% {
+    box-shadow:
+      inset 0 0 0 2px rgba(255,255,255,.55),
+      0 0 0 0 rgba(255, 209, 102, .42);
+  }
+
+  50% {
+    box-shadow:
+      inset 0 0 0 2px rgba(255,255,255,.8),
+      0 0 22px 6px rgba(255, 209, 102, .32);
+  }
+}
+
+.paste-target-big-indicator {
+  position: absolute !important;
+  z-index: 40 !important;
+  left: 50% !important;
+  top: 50% !important;
+  display: grid !important;
+  justify-items: center !important;
+  gap: 4px !important;
+  min-width: 74px !important;
+  padding: 8px 10px !important;
+  border-radius: 15px !important;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,.5), transparent 35%),
+    linear-gradient(145deg, #ffd166, #f18b31) !important;
+  color: #173f4b !important;
+  box-shadow:
+    0 10px 18px rgba(45,42,34,.22),
+    0 0 22px rgba(255, 209, 102, .55) !important;
+  transform: translate(-50%, -50%) !important;
+  animation: safeIndicatorBeat .85s ease-in-out infinite !important;
+  pointer-events: none !important;
+}
+
+.paste-target-big-indicator strong {
+  font-size: .58rem !important;
+  line-height: 1 !important;
+  text-transform: uppercase !important;
+  letter-spacing: .04em !important;
+}
+
+@keyframes safeIndicatorBeat {
+  0%, 100% {
+    opacity: .94;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+}
+
+.ghost-sticker-preview {
+  position: absolute !important;
+  z-index: 20 !important;
+  left: 50% !important;
+  top: 50% !important;
+  width: 82% !important;
+  height: 82% !important;
+  object-fit: contain !important;
+  opacity: .18 !important;
+  transform: translate(-50%, -50%) rotate(-2deg) !important;
+  pointer-events: none !important;
+  filter: drop-shadow(0 6px 8px rgba(0,0,0,.12)) !important;
+}
+
+.real-sticker-slot.locked-pop {
+  overflow: hidden !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+.real-sticker-slot.locked-pop .pasted-image {
+  animation: safeStickerPopInside .72s cubic-bezier(.2, 1.35, .35, 1) both;
+}
+
+@keyframes safeStickerPopInside {
+  0% {
+    opacity: 0;
+    transform: scale(.55) rotate(-5deg);
+  }
+
+  55% {
+    opacity: 1;
+    transform: scale(1.08) rotate(1deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.real-sticker-image.pasted-image {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  display: grid !important;
+  place-items: center !important;
+  background: transparent !important;
+}
+
+.real-sticker-image.pasted-image img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  background: transparent !important;
+  filter: drop-shadow(0 7px 8px rgba(0,0,0,.16)) !important;
+}
+
+.pasted-success-flash {
+  position: absolute !important;
+  z-index: 45 !important;
+  left: 50% !important;
+  top: 50% !important;
+  display: grid !important;
+  width: 48px !important;
+  height: 48px !important;
+  place-items: center !important;
+  border-radius: 999px !important;
+  background: rgba(255, 209, 102, .96) !important;
+  color: #173f4b !important;
+  box-shadow:
+    0 0 22px rgba(255, 209, 102, .8),
+    0 10px 18px rgba(45,42,34,.18) !important;
+  transform: translate(-50%, -50%) !important;
+  animation: safeFlashOut .8s ease-out forwards !important;
+  pointer-events: none !important;
+}
+
+@keyframes safeFlashOut {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(.45);
+  }
+
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.65);
+  }
+}
+
+/* Mobile: indicador más chico para no deformar */
+@media (orientation: landscape) and (max-height: 560px) {
+  .paste-target-big-indicator {
+    min-width: 58px !important;
+    padding: 6px 7px !important;
+    border-radius: 12px !important;
+  }
+
+  .paste-target-big-indicator strong {
+    font-size: .48rem !important;
+  }
+
+  .pasted-success-flash {
+    width: 38px !important;
+    height: 38px !important;
+  }
+}
+
+/* ============================================================
+   FONDO DEL ALBUM EN PALETA CELESTE / VERDE
+   ============================================================ */
+
+.real-album-screen {
+  background:
+    radial-gradient(circle at 16% 12%, rgba(255, 209, 102, .16), transparent 25%),
+    radial-gradient(circle at 82% 18%, rgba(44, 143, 163, .22), transparent 24%),
+    radial-gradient(circle at 50% 82%, rgba(138, 203, 85, .16), transparent 28%),
+    linear-gradient(135deg, #d9eef0 0%, #f5e7c9 52%, #bfe7e4 100%) !important;
+}
+
+.real-album-screen::before {
+  opacity: .18 !important;
+  background-image:
+    radial-gradient(circle, rgba(23, 63, 75, .22) 0 1px, transparent 1.5px),
+    repeating-linear-gradient(135deg, transparent 0 18px, rgba(255,255,255,.32) 19px 20px) !important;
+  background-size: 24px 24px, 90px 90px !important;
+}
+
+.empty-open-pack-message {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 22px 26px;
+  border-radius: 28px;
+  background: rgba(255, 248, 229, .82);
+  color: #173f4b;
+  box-shadow: 0 20px 36px rgba(45, 42, 34, .18);
+  text-align: center;
+}
+
+.empty-open-pack-message strong {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.empty-open-pack-message span {
+  max-width: 260px;
+  color: rgba(23,63,75,.72);
+  font-weight: 800;
+}
+
+/* Cuando quedan 2 o 1 figuritas en el sobre, centrarlas mejor */
+.new-stickers-reveal.count-2 .sticker-1 {
+  animation-name: stickerSpringMobileLeft !important;
+}
+
+.new-stickers-reveal.count-2 .sticker-2 {
+  animation-name: stickerSpringMobileRight !important;
+}
+
+.new-stickers-reveal.count-1 .sticker-1 {
+  animation-name: stickerSpringCenter !important;
+}
+
+/* ============================================================
+   PANEL POST PEGADO
+   ============================================================ */
+
+.after-paste-panel {
+  position: absolute;
+  z-index: 80;
+  right: clamp(12px, 3vw, 34px);
+  top: clamp(12px, 3vw, 34px);
+  display: grid;
+  gap: 10px;
+  width: min(92vw, 280px);
+  padding: 14px;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 30% 18%, rgba(255,255,255,.6), transparent 34%),
+    rgba(255, 248, 229, .94);
+  color: #173f4b;
+  box-shadow:
+    0 18px 34px rgba(45,42,34,.22),
+    inset 0 0 0 2px rgba(255,255,255,.55);
+  animation: afterPasteIn .35s ease both;
+}
+
+@keyframes afterPasteIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.after-paste-panel div {
+  display: grid;
+  gap: 3px;
+}
+
+.after-paste-panel div svg {
+  color: #2c8fa3;
+}
+
+.after-paste-panel strong {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.after-paste-panel span {
+  color: rgba(23,63,75,.72);
+  font-size: .78rem;
+  font-weight: 850;
+}
+
+.after-paste-panel button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  border: 0;
+  border-radius: 999px;
+  background: #173f4b;
+  color: white;
+  font-weight: 950;
+}
+
+.after-paste-panel button.secondary {
+  background: rgba(23,63,75,.1);
+  color: #173f4b;
+}
+
+@media (orientation: landscape) and (max-height: 560px) {
+  .after-paste-panel {
+    right: 8px;
+    top: 8px;
+    width: 220px;
+    padding: 10px;
+    gap: 7px;
+    border-radius: 18px;
+  }
+
+  .after-paste-panel strong {
+    font-size: .82rem;
+  }
+
+  .after-paste-panel span {
+    font-size: .65rem;
+  }
+
+  .after-paste-panel button {
+    min-height: 32px;
+    font-size: .68rem;
+  }
+}

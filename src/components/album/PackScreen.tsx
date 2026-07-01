@@ -1,5 +1,5 @@
-﻿import { useMemo, useState, type CSSProperties } from "react";
-import { ArrowLeft, Eye, PackageOpen, Sparkles } from "lucide-react";
+﻿import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { ArrowLeft, PackageOpen, Sparkles } from "lucide-react";
 import type { AlbumCard } from "../../types/album";
 import { IconForCard } from "./IconForCard";
 import { getStickerImage } from "../../data/stickerImages";
@@ -7,12 +7,16 @@ import { getStickerImage } from "../../data/stickerImages";
 type RevealedSticker = {
   card: AlbumCard;
   imageSrc: string | null;
+  repeated: boolean;
 };
 
 type Props = {
   onBack: () => void;
   onOpenPack: (count: number) => AlbumCard[];
+  currentPackCards: AlbumCard[];
   onViewCard: (card: AlbumCard) => void;
+  isPasted: (card: AlbumCard) => boolean;
+  isDuplicate: (card: AlbumCard) => boolean;
 };
 
 const PACK_IMAGE = "/images/packs/sobre-olavarria.png";
@@ -28,10 +32,34 @@ const CONFETTI_COLORS = [
   "#ff5fa2"
 ];
 
-export function PackScreen({ onBack, onOpenPack, onViewCard }: Props) {
-  const [phase, setPhase] = useState<"idle" | "opening" | "revealed">("idle");
+export function PackScreen({
+  onBack,
+  onOpenPack,
+  currentPackCards,
+  onViewCard,
+  isPasted
+}: Props) {
+  const [phase, setPhase] = useState<"idle" | "opening" | "revealed">(
+    currentPackCards.length > 0 ? "revealed" : "idle"
+  );
   const [revealedStickers, setRevealedStickers] = useState<RevealedSticker[]>([]);
   const [confettiKey, setConfettiKey] = useState(0);
+
+  useEffect(() => {
+    if (currentPackCards.length > 0) {
+      setPhase("revealed");
+      setRevealedStickers(
+        currentPackCards.map((card) => ({
+          card,
+          imageSrc: getStickerImage(card),
+          repeated: isPasted(card)
+        }))
+      );
+    } else {
+      setPhase("idle");
+      setRevealedStickers([]);
+    }
+  }, [currentPackCards, isPasted]);
 
   const confettiPieces = useMemo(() => {
     return Array.from({ length: 120 }, (_, index) => {
@@ -71,7 +99,8 @@ export function PackScreen({ onBack, onOpenPack, onViewCard }: Props) {
 
       const nextStickers = cards.map((card) => ({
         card,
-        imageSrc: getStickerImage(card)
+        imageSrc: getStickerImage(card),
+        repeated: isPasted(card)
       }));
 
       setRevealedStickers(nextStickers);
@@ -79,7 +108,7 @@ export function PackScreen({ onBack, onOpenPack, onViewCard }: Props) {
     }, 1900);
   }
 
-  function resetPack() {
+  function prepareAnotherPack() {
     setPhase("idle");
     setRevealedStickers([]);
   }
@@ -93,22 +122,30 @@ export function PackScreen({ onBack, onOpenPack, onViewCard }: Props) {
       <section className={`new-pack-stage ${phase}`}>
         <div className="new-pack-bg" />
 
-        <header className="new-pack-header">
+        <header className="new-pack-header compact-pack-header">
           <span>Abrir sobre</span>
-          <h1>Nuevo paquete</h1>
-          <p>Conseguí tres figuritas para seguir completando el álbum.</p>
+          {phase === "idle" && <p>Tocá el sobre para descubrir tus figuritas.</p>}
+          {phase === "opening" && <p>Abriendo...</p>}
+          {phase === "revealed" && revealedStickers.length > 0 && (
+            <p>Tocá una figurita para pegarla en el álbum.</p>
+          )}
+          {phase === "revealed" && revealedStickers.length === 0 && (
+            <p>Ya pegaste todas las figuritas de este sobre.</p>
+          )}
         </header>
 
         <div className="new-pack-table">
-          <div className={`new-pack-envelope ${phase}`}>
-            <div className="new-pack-lid">
-              <img src={PACK_IMAGE} alt="Parte superior del sobre" />
+          {phase !== "revealed" && (
+            <div className={`new-pack-envelope ${phase}`} onClick={phase === "idle" ? openPack : undefined}>
+              <div className="new-pack-lid">
+                <img src={PACK_IMAGE} alt="Parte superior del sobre" />
+              </div>
+
+              <img className="new-pack-full" src={PACK_IMAGE} alt="Sobre Olavarría en Figuritas" />
+
+              <div className="new-pack-cut-line" />
             </div>
-
-            <img className="new-pack-full" src={PACK_IMAGE} alt="Sobre Olavarría en Figuritas" />
-
-            <div className="new-pack-cut-line" />
-          </div>
+          )}
 
           {phase === "opening" && (
             <div className="simple-confetti-layer" key={confettiKey}>
@@ -133,32 +170,36 @@ export function PackScreen({ onBack, onOpenPack, onViewCard }: Props) {
             </div>
           )}
 
-          {phase === "revealed" && (
-            <div className="new-stickers-reveal">
+          {phase === "revealed" && revealedStickers.length > 0 && (
+            <div className={`new-stickers-reveal count-${revealedStickers.length}`}>
               {revealedStickers.map((item, index) => (
-                <article
+                <button
                   key={`${item.card.id}-${index}`}
-                  className={`new-revealed-sticker sticker-${index + 1}`}
+                  className={`new-revealed-sticker sticker-${index + 1} ${item.repeated ? "repeated" : "fresh"}`}
+                  onClick={() => onViewCard(item.card)}
                   style={{ "--card-color": item.card.color } as CSSProperties}
                 >
                   <div className="new-revealed-image">
                     {item.imageSrc ? (
                       <img src={item.imageSrc} alt={item.card.title} />
-                    ) : null}
-
-                    {!item.imageSrc ? (
+                    ) : (
                       <div className="new-revealed-fallback">
                         <IconForCard card={item.card} size={40} />
                       </div>
-                    ) : null}
+                    )}
                   </div>
 
-                  <button onClick={() => onViewCard(item.card)}>
-                    <Eye size={18} />
-                    Ver
-                  </button>
-                </article>
+                  {item.repeated && <span className="repeated-badge">Repetida · +1 toquito</span>}
+                </button>
               ))}
+            </div>
+          )}
+
+          {phase === "revealed" && revealedStickers.length === 0 && (
+            <div className="empty-open-pack-message">
+              <Sparkles size={38} />
+              <strong>Sobre completado</strong>
+              <span>Ya no quedan figuritas pendientes en este sobre.</span>
             </div>
           )}
         </div>
@@ -180,13 +221,13 @@ export function PackScreen({ onBack, onOpenPack, onViewCard }: Props) {
 
           {phase === "revealed" && (
             <>
-              <button className="new-pack-main-button" onClick={resetPack}>
+              <button className="new-pack-main-button" onClick={prepareAnotherPack}>
                 <PackageOpen size={22} />
-                Preparar otro
+                Otro sobre
               </button>
 
               <button className="new-pack-secondary-button" onClick={onBack}>
-                Volver al menú
+                Menú
               </button>
             </>
           )}

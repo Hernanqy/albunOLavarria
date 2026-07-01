@@ -13,30 +13,41 @@ import type { AlbumCard, SectionId, View } from "./types/album";
 
 const albumCards: AlbumCard[] = [...baseCards, ...extraCards];
 
-const STORAGE_KEY = "olavarria-en-figuritas-pasted-ids";
+const STORAGE_KEY = "olavarria-en-figuritas-pasted-ids-v3";
+const DUPLICATES_KEY = "olavarria-en-figuritas-duplicates-v3";
+const INVENTORY_KEY = "olavarria-en-figuritas-inventory-v3";
+const OPEN_PACK_KEY = "olavarria-en-figuritas-open-pack-v3";
 
-const starterPastedIds = albumCards
-  .filter((card) => card.pasted)
-  .map((card) => card.id);
+const starterPastedIds: string[] = [];
 
-function readInitialPastedIds() {
+function readStringArray(key: string, fallback: string[]) {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-
-    if (!saved) return starterPastedIds;
+    const saved = localStorage.getItem(key);
+    if (!saved) return fallback;
 
     const parsed = JSON.parse(saved);
+    if (!Array.isArray(parsed)) return fallback;
 
-    if (!Array.isArray(parsed)) return starterPastedIds;
-
-    const validIds = parsed.filter((id) =>
-      albumCards.some((card) => card.id === id)
-    );
-
-    return Array.from(new Set([...starterPastedIds, ...validIds]));
+    return parsed.filter((id) => typeof id === "string");
   } catch {
-    return starterPastedIds;
+    return fallback;
   }
+}
+
+function readInitialPastedIds() {
+  const savedIds = readStringArray(STORAGE_KEY, starterPastedIds);
+
+  const validIds = savedIds.filter((id) =>
+    albumCards.some((card) => card.id === id)
+  );
+
+  return Array.from(new Set(validIds));
+}
+
+function cardsFromIds(ids: string[]) {
+  return ids
+    .map((id) => albumCards.find((card) => card.id === id))
+    .filter((card): card is AlbumCard => Boolean(card));
 }
 
 function shuffleCards(cards: AlbumCard[]) {
@@ -59,7 +70,7 @@ async function tryFullscreenLandscape() {
       await orientation.lock("landscape");
     }
   } catch {
-    // Puede fallar en navegador común.
+    // En navegador común puede fallar. Como PWA instalada funciona mejor.
   }
 }
 
@@ -67,11 +78,35 @@ export default function App() {
   const [view, setView] = useState<View>("index");
   const [activeSectionId, setActiveSectionId] = useState<SectionId>("historia");
   const [selectedCard, setSelectedCard] = useState<AlbumCard | null>(null);
+  const [pendingPasteCard, setPendingPasteCard] = useState<AlbumCard | null>(null);
+  const [lastPastedCard, setLastPastedCard] = useState<AlbumCard | null>(null);
+
   const [pastedIds, setPastedIds] = useState<string[]>(readInitialPastedIds);
+  const [duplicateIds, setDuplicateIds] = useState<string[]>(
+    () => readStringArray(DUPLICATES_KEY, [])
+  );
+  const [inventoryIds, setInventoryIds] = useState<string[]>(
+    () => readStringArray(INVENTORY_KEY, [])
+  );
+  const [openPackIds, setOpenPackIds] = useState<string[]>(
+    () => readStringArray(OPEN_PACK_KEY, [])
+  );
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(pastedIds));
   }, [pastedIds]);
+
+  useEffect(() => {
+    localStorage.setItem(DUPLICATES_KEY, JSON.stringify(duplicateIds));
+  }, [duplicateIds]);
+
+  useEffect(() => {
+    localStorage.setItem(INVENTORY_KEY, JSON.stringify(inventoryIds));
+  }, [inventoryIds]);
+
+  useEffect(() => {
+    localStorage.setItem(OPEN_PACK_KEY, JSON.stringify(openPackIds));
+  }, [openPackIds]);
 
   useEffect(() => {
     const start = () => {
@@ -94,9 +129,26 @@ export default function App() {
 
   const completed = pastedIds.length;
   const percent = Math.round((completed / albumCards.length) * 100);
+  const openPackCards = cardsFromIds(openPackIds);
 
   function isPasted(card: AlbumCard) {
     return pastedIds.includes(card.id);
+  }
+
+  function isDuplicate(card: AlbumCard) {
+    return duplicateIds.includes(card.id);
+  }
+
+  function addToInventory(cards: AlbumCard[]) {
+    setInventoryIds((current) => {
+      const next = new Set(current);
+      cards.forEach((card) => next.add(card.id));
+      return Array.from(next);
+    });
+  }
+
+  function removeFromOpenPack(card: AlbumCard) {
+    setOpenPackIds((current) => current.filter((id) => id !== card.id));
   }
 
   function openCard(card: AlbumCard) {
@@ -109,35 +161,72 @@ export default function App() {
       if (current.includes(card.id)) return current;
       return [...current, card.id];
     });
+
+    setInventoryIds((current) => current.filter((id) => id !== card.id));
+    removeFromOpenPack(card);
+    setPendingPasteCard(null);
+    setLastPastedCard(card);
   }
 
-  function openPackCards(count: number) {
+  function createPackCards(count: number) {
     const imageReadyCards = albumCards.filter(hasStickerImage);
+    const missingImageReadyCards = imageReadyCards.filter((card) => !pastedIds.includes(card.id));
+    const missingAnyCards = albumCards.filter((card) => !pastedIds.includes(card.id));
 
-    const missingImageReady = imageReadyCards.filter((card) => !pastedIds.includes(card.id));
-    const missingGeneral = albumCards.filter((card) => !pastedIds.includes(card.id));
+    let selected: AlbumCard[] = [];
 
-    let pool: AlbumCard[] = [];
+    if (missingImageReadyCards.length >= count) {
+      selected = shuffleCards(missingImageReadyCards).slice(0, count);
+    } else if (missingImageReadyCards.length > 0) {
+      const needed = count - missingImageReadyCards.length;
+      const extraPool = missingAnyCards.filter(
+        (card) => !missingImageReadyCards.some((item) => item.id === card.id)
+      );
 
-    if (missingImageReady.length >= count) {
-      pool = missingImageReady;
-    } else if (imageReadyCards.length >= count) {
-      pool = imageReadyCards;
-    } else if (missingGeneral.length >= count) {
-      pool = missingGeneral;
+      selected = [
+        ...shuffleCards(missingImageReadyCards),
+        ...shuffleCards(extraPool).slice(0, needed)
+      ];
+    } else if (missingAnyCards.length >= count) {
+      selected = shuffleCards(missingAnyCards).slice(0, count);
     } else {
-      pool = albumCards;
+      selected = shuffleCards(imageReadyCards.length > 0 ? imageReadyCards : albumCards).slice(0, count);
     }
 
-    const selected = shuffleCards(pool).slice(0, count);
+    const repeatedCards = selected.filter((card) => pastedIds.includes(card.id));
 
-    setPastedIds((current) => {
-      const next = new Set(current);
-      selected.forEach((card) => next.add(card.id));
-      return Array.from(next);
-    });
+    if (repeatedCards.length > 0) {
+      setDuplicateIds((current) => {
+        const next = new Set(current);
+        repeatedCards.forEach((card) => next.add(card.id));
+        return Array.from(next);
+      });
+    }
+
+    addToInventory(selected);
+    setOpenPackIds(selected.map((card) => card.id));
+    setLastPastedCard(null);
 
     return selected;
+  }
+
+  function chooseStickerFromPack(card: AlbumCard) {
+    addToInventory([card]);
+    setLastPastedCard(null);
+
+    if (isPasted(card)) {
+      setDuplicateIds((current) => {
+        if (current.includes(card.id)) return current;
+        return [...current, card.id];
+      });
+
+      setSelectedCard(card);
+      return;
+    }
+
+    setPendingPasteCard(card);
+    setActiveSectionId(card.sectionId);
+    setView("section");
   }
 
   function scanCode(code: string) {
@@ -149,7 +238,19 @@ export default function App() {
 
     if (!card) return null;
 
-    pasteCard(card);
+    addToInventory([card]);
+
+    if (isPasted(card)) {
+      setDuplicateIds((current) => {
+        if (current.includes(card.id)) return current;
+        return [...current, card.id];
+      });
+    } else {
+      setPendingPasteCard(card);
+      setActiveSectionId(card.sectionId);
+      setLastPastedCard(null);
+    }
+
     return card;
   }
 
@@ -176,17 +277,29 @@ export default function App() {
         completed={completed}
         total={albumCards.length}
         isPasted={isPasted}
+        pendingPasteCard={pendingPasteCard}
+        lastPastedCard={lastPastedCard}
+        hasOpenPack={openPackIds.length > 0}
         onBack={() => setView("index")}
         onChangeSection={setActiveSectionId}
         onOpenCard={openCard}
+        onPastePendingCard={pasteCard}
+        onReturnToPack={() => {
+          setLastPastedCard(null);
+          setView("pack");
+        }}
+        onStayInAlbum={() => setLastPastedCard(null)}
       />
     );
   } else if (view === "pack") {
     screen = (
       <PackScreen
         onBack={() => setView("index")}
-        onOpenPack={openPackCards}
-        onViewCard={openCard}
+        onOpenPack={createPackCards}
+        currentPackCards={openPackCards}
+        onViewCard={chooseStickerFromPack}
+        isPasted={isPasted}
+        isDuplicate={isDuplicate}
       />
     );
   } else if (view === "scanner") {
@@ -217,6 +330,7 @@ export default function App() {
         <StickerDetail
           card={selectedCard}
           pasted={isPasted(selectedCard)}
+          duplicate={isDuplicate(selectedCard)}
           onClose={() => setSelectedCard(null)}
         />
       )}

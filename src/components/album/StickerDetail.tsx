@@ -1,5 +1,5 @@
 ﻿import { useEffect, useState, type CSSProperties } from "react";
-import { RotateCcw, X } from "lucide-react";
+import { BookOpen, RotateCcw, Sparkles, X } from "lucide-react";
 import type { AlbumCard } from "../../types/album";
 import { IconForCard } from "./IconForCard";
 import { getStickerImage } from "../../data/stickerImages";
@@ -7,10 +7,11 @@ import { getStickerImage } from "../../data/stickerImages";
 type Props = {
   card: AlbumCard;
   pasted: boolean;
+  duplicate?: boolean;
   onClose: () => void;
 };
 
-export function StickerDetail({ card, pasted, onClose }: Props) {
+export function StickerDetail({ card, pasted, duplicate = false, onClose }: Props) {
   const [flipped, setFlipped] = useState(false);
   const imageSrc = getStickerImage(card);
 
@@ -31,16 +32,25 @@ export function StickerDetail({ card, pasted, onClose }: Props) {
 
         <div className="sticker-modal-hint">
           <RotateCcw size={16} />
-          Tocá la figurita para girarla
+          Tocá para girar
         </div>
 
         <div className="sticker-modal-scene" onClick={() => setFlipped((value) => !value)}>
           <div className={`sticker-modal-card ${flipped ? "is-flipped" : ""}`}>
-            <article className="sticker-modal-face sticker-modal-front">
+            <article className="sticker-modal-face sticker-modal-front clean-front">
               <span className="sticker-modal-number">N.º {card.number}</span>
-              <span className={`sticker-modal-status ${pasted ? "pasted" : "missing"}`}>
-                {pasted ? "Conseguida" : "No conseguida"}
-              </span>
+
+              {duplicate && (
+                <span className="sticker-modal-status duplicate">
+                  Repetida
+                </span>
+              )}
+
+              {!duplicate && (
+                <span className={`sticker-modal-status ${pasted ? "pasted" : "missing"}`}>
+                  {pasted ? "Pegada" : "Sin pegar"}
+                </span>
+              )}
 
               {imageSrc ? (
                 <img src={imageSrc} alt={card.title} className="sticker-modal-real-image" />
@@ -53,18 +63,34 @@ export function StickerDetail({ card, pasted, onClose }: Props) {
               )}
             </article>
 
-            <article className="sticker-modal-face sticker-modal-back">
-              <span className="sticker-modal-back-number">N.º {card.number}</span>
-              <h2>{card.title}</h2>
-              <div className="sticker-modal-back-section">
-                {(card as AlbumCard).sectionId}
-              </div>
-              <p>{card.description}</p>
+            <article className="sticker-modal-face sticker-modal-back creative-back">
+              <div className="creative-back-pattern" />
 
-              <div className="sticker-modal-back-meta">
-                <strong>{pasted ? "Ya está en tu colección" : "Todavía no está pegada"}</strong>
-                <span>Volvé a tocar para ver el frente</span>
-              </div>
+              <header className="creative-back-header">
+                <span>N.º {card.number}</span>
+                <strong>{card.section}</strong>
+              </header>
+
+              <main className="creative-back-body">
+                <div className="creative-back-icon">
+                  <IconForCard card={card} size={42} />
+                </div>
+
+                <h2>{card.title}</h2>
+                <p>{card.description}</p>
+              </main>
+
+              <footer className="creative-back-footer">
+                <div>
+                  <Sparkles size={18} />
+                  <span>{duplicate ? "Toquito virtual para intercambio" : pasted ? "Pegada en tu álbum" : "Lista para pegar"}</span>
+                </div>
+
+                <div>
+                  <BookOpen size={18} />
+                  <span>Tocá para volver al frente</span>
+                </div>
+              </footer>
             </article>
           </div>
         </div>
