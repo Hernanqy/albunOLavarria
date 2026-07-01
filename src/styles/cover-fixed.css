@@ -8021,3 +8021,274 @@ body {
     font-size: .68rem;
   }
 }
+
+/* ============================================================
+   FIX IPHONE HORIZONTAL - ALBUM COMPLETO Y FIGURITAS AJUSTADAS
+   ============================================================ */
+
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1000px) {
+  .real-album-screen {
+    width: 100vw !important;
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+  }
+
+  .real-album-stage {
+    width: 76vw !important;
+    height: 58dvh !important;
+    max-width: 760px !important;
+    max-height: 320px !important;
+    transform: translateY(-2px) !important;
+  }
+
+  .real-album-spread {
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    border-radius: 12px !important;
+  }
+
+  .real-album-page {
+    padding: 8px !important;
+    gap: 5px !important;
+    overflow: hidden !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+  }
+
+  .real-page-header {
+    min-height: 0 !important;
+  }
+
+  .real-page-header span {
+    font-size: .48rem !important;
+    padding: 4px 8px !important;
+  }
+
+  .real-page-header h1 {
+    font-size: 1.35rem !important;
+    line-height: .9 !important;
+    margin-top: 4px !important;
+  }
+
+  .real-page-header p {
+    display: none !important;
+  }
+
+  .real-section-progress {
+    padding: 4px 8px !important;
+    font-size: .62rem !important;
+  }
+
+  .real-sticker-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .real-sticker-slot {
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    padding: 4px !important;
+    overflow: hidden !important;
+    display: grid !important;
+    grid-template-rows: minmax(0, 1fr) auto !important;
+    gap: 2px !important;
+    transform: none !important;
+    contain: layout paint !important;
+  }
+
+  .real-sticker-slot.pasted {
+    background: rgba(255,255,255,.42) !important;
+  }
+
+  .real-sticker-image,
+  .real-sticker-image.pasted-image {
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    overflow: hidden !important;
+    display: grid !important;
+    place-items: center !important;
+    background: transparent !important;
+    border-radius: 8px !important;
+  }
+
+  .real-sticker-image img,
+  .real-sticker-image.pasted-image img {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 96% !important;
+    max-height: 96% !important;
+    object-fit: contain !important;
+    background: transparent !important;
+    filter: drop-shadow(0 5px 6px rgba(0,0,0,.16)) !important;
+  }
+
+  /* El PNG ya trae texto, entonces ocultamos el texto extra del sistema en mobile horizontal */
+  .real-sticker-slot.pasted > strong {
+    display: none !important;
+  }
+
+  .real-sticker-slot.pasted > small {
+    right: 5px !important;
+    top: 5px !important;
+    width: 22px !important;
+    height: 22px !important;
+    font-size: .58rem !important;
+  }
+
+  .real-empty-number {
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 1rem !important;
+  }
+
+  .real-sticker-slot em {
+    font-size: .46rem !important;
+  }
+
+  .real-album-back {
+    width: 44px !important;
+    height: 44px !important;
+    left: 10px !important;
+    top: 10px !important;
+  }
+
+  .real-album-nav {
+    bottom: 6px !important;
+    gap: 8px !important;
+  }
+
+  .real-album-nav button {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  .real-album-section-pill {
+    min-width: 190px !important;
+    padding: 8px 18px !important;
+  }
+
+  .real-album-section-pill strong {
+    font-size: .8rem !important;
+  }
+
+  .real-album-section-pill span {
+    font-size: .58rem !important;
+  }
+
+  .paste-instruction {
+    top: 6px !important;
+    max-width: 58vw !important;
+    padding: 7px 11px !important;
+    font-size: .62rem !important;
+  }
+
+  .after-paste-panel {
+    width: 210px !important;
+    right: 8px !important;
+    top: 8px !important;
+    padding: 9px !important;
+    gap: 7px !important;
+    border-radius: 18px !important;
+  }
+
+  .after-paste-panel strong {
+    font-size: .78rem !important;
+  }
+
+  .after-paste-panel span {
+    font-size: .62rem !important;
+  }
+
+  .after-paste-panel button {
+    min-height: 30px !important;
+    font-size: .64rem !important;
+  }
+}
+
+/* iPhone horizontal con barra grande de Safari */
+@media (orientation: landscape) and (max-height: 430px) and (max-width: 950px) {
+  .real-album-stage {
+    width: 74vw !important;
+    height: 54dvh !important;
+    max-height: 250px !important;
+  }
+
+  .real-page-header h1 {
+    font-size: 1.1rem !important;
+  }
+
+  .real-page-header span {
+    font-size: .42rem !important;
+  }
+
+  .real-sticker-grid {
+    gap: 4px !important;
+  }
+
+  .real-sticker-slot {
+    padding: 3px !important;
+    border-radius: 8px !important;
+  }
+
+  .real-album-nav {
+    bottom: 3px !important;
+  }
+
+  .real-album-section-pill {
+    min-width: 170px !important;
+    padding: 7px 14px !important;
+  }
+
+  .after-paste-panel {
+    width: 190px !important;
+  }
+}
+
+/* ============================================================
+   PEGADO SEGURO: ANIMA SOLO LA IMAGEN, NO EL CASILLERO
+   ============================================================ */
+
+.real-sticker-slot.just-pasted,
+.real-sticker-slot.locked-pop,
+.real-sticker-slot.force-visible-target {
+  transform: none !important;
+}
+
+.real-sticker-slot.just-pasted .pasted-image,
+.real-sticker-slot.locked-pop .pasted-image {
+  animation: safeStickerInsidePopOnly .62s cubic-bezier(.2, 1.25, .35, 1) both !important;
+}
+
+@keyframes safeStickerInsidePopOnly {
+  0% {
+    opacity: 0;
+    transform: scale(.62) rotate(-4deg);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.04) rotate(1deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
