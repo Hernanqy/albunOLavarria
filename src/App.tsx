@@ -8,6 +8,7 @@ import { StickerDetail } from "./components/album/StickerDetail";
 import { cards as baseCards, sections } from "./data/albumData";
 import { extraCards } from "./data/extraAlbumCards";
 import { qrCodes } from "./data/qrCodes";
+import { hasStickerImage } from "./data/stickerImages";
 import type { AlbumCard, SectionId, View } from "./types/album";
 
 const albumCards: AlbumCard[] = [...baseCards, ...extraCards];
@@ -38,6 +39,10 @@ function readInitialPastedIds() {
   }
 }
 
+function shuffleCards(cards: AlbumCard[]) {
+  return [...cards].sort(() => Math.random() - 0.5);
+}
+
 async function tryFullscreenLandscape() {
   try {
     const element = document.documentElement;
@@ -54,7 +59,7 @@ async function tryFullscreenLandscape() {
       await orientation.lock("landscape");
     }
   } catch {
-    // El navegador puede bloquear esto si no está instalada como PWA.
+    // Puede fallar en navegador común.
   }
 }
 
@@ -62,7 +67,6 @@ export default function App() {
   const [view, setView] = useState<View>("index");
   const [activeSectionId, setActiveSectionId] = useState<SectionId>("historia");
   const [selectedCard, setSelectedCard] = useState<AlbumCard | null>(null);
-  const [lastPackCard, setLastPackCard] = useState<AlbumCard | null>(null);
   const [pastedIds, setPastedIds] = useState<string[]>(readInitialPastedIds);
 
   useEffect(() => {
@@ -98,7 +102,6 @@ export default function App() {
   function openCard(card: AlbumCard) {
     setSelectedCard(card);
     setActiveSectionId(card.sectionId);
-    setView("sticker");
   }
 
   function pasteCard(card: AlbumCard) {
@@ -108,15 +111,33 @@ export default function App() {
     });
   }
 
-  function openPack() {
-    const missing = albumCards.filter((card) => !pastedIds.includes(card.id));
-    const pool = missing.length > 0 ? missing : albumCards;
-    const next = pool[Math.floor(Math.random() * pool.length)];
+  function openPackCards(count: number) {
+    const imageReadyCards = albumCards.filter(hasStickerImage);
 
-    pasteCard(next);
-    setLastPackCard(next);
+    const missingImageReady = imageReadyCards.filter((card) => !pastedIds.includes(card.id));
+    const missingGeneral = albumCards.filter((card) => !pastedIds.includes(card.id));
 
-    return next;
+    let pool: AlbumCard[] = [];
+
+    if (missingImageReady.length >= count) {
+      pool = missingImageReady;
+    } else if (imageReadyCards.length >= count) {
+      pool = imageReadyCards;
+    } else if (missingGeneral.length >= count) {
+      pool = missingGeneral;
+    } else {
+      pool = albumCards;
+    }
+
+    const selected = shuffleCards(pool).slice(0, count);
+
+    setPastedIds((current) => {
+      const next = new Set(current);
+      selected.forEach((card) => next.add(card.id));
+      return Array.from(next);
+    });
+
+    return selected;
   }
 
   function scanCode(code: string) {
@@ -132,25 +153,22 @@ export default function App() {
     return card;
   }
 
+  let screen = null;
+
   if (view === "index") {
-    return (
+    screen = (
       <AlbumIndex
         completed={completed}
         total={albumCards.length}
         percent={percent}
         onExplore={() => setView("section")}
-        onOpenPack={() => {
-          setLastPackCard(null);
-          setView("pack");
-        }}
+        onOpenPack={() => setView("pack")}
         onScanner={() => setView("scanner")}
         onMap={() => setView("map")}
       />
     );
-  }
-
-  if (view === "section") {
-    return (
+  } else if (view === "section") {
+    screen = (
       <AlbumPages
         cards={albumCards}
         sections={sections}
@@ -163,51 +181,45 @@ export default function App() {
         onOpenCard={openCard}
       />
     );
-  }
-
-  if (view === "sticker" && selectedCard) {
-    return (
-      <StickerDetail
-        card={selectedCard}
-        pasted={isPasted(selectedCard)}
-        onBack={() => setView("section")}
-        onPaste={() => {
-          pasteCard(selectedCard);
-          setView("section");
-        }}
-      />
-    );
-  }
-
-  if (view === "pack") {
-    return (
+  } else if (view === "pack") {
+    screen = (
       <PackScreen
         onBack={() => setView("index")}
-        onOpenPack={openPack}
-        lastCard={lastPackCard}
+        onOpenPack={openPackCards}
         onViewCard={openCard}
       />
     );
-  }
-
-  if (view === "scanner") {
-    return (
+  } else if (view === "scanner") {
+    screen = (
       <ScannerScreen
         onBack={() => setView("index")}
         onScanCode={scanCode}
         onViewCard={openCard}
       />
     );
+  } else {
+    screen = (
+      <MapScreen
+        cards={albumCards}
+        isPasted={isPasted}
+        onBack={() => setView("index")}
+        onUnlockCode={scanCode}
+        onViewCard={openCard}
+      />
+    );
   }
 
   return (
-    <MapScreen
-      cards={albumCards}
-      isPasted={isPasted}
-      onBack={() => setView("index")}
-      onUnlockCode={scanCode}
-      onViewCard={openCard}
-    />
+    <>
+      {screen}
+
+      {selectedCard && (
+        <StickerDetail
+          card={selectedCard}
+          pasted={isPasted(selectedCard)}
+          onClose={() => setSelectedCard(null)}
+        />
+      )}
+    </>
   );
 }
-

@@ -1,5 +1,5 @@
 ﻿import { useEffect, useMemo, useState, type CSSProperties } from "react";
-import { ArrowLeft, ChevronLeft, ChevronRight, MapPin } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import type { AlbumCard, AlbumSection, SectionId } from "../../types/album";
 import { IconForCard } from "./IconForCard";
 
@@ -15,7 +15,7 @@ type Props = {
   onOpenCard: (card: AlbumCard) => void;
 };
 
-const CARDS_PER_SPREAD = 6;
+const CARDS_PER_SPREAD = 8;
 
 export function AlbumPages({
   cards,
@@ -32,8 +32,6 @@ export function AlbumPages({
 
   const activeSection = sections.find((section) => section.id === activeSectionId) ?? sections[0];
   const sectionIndex = sections.findIndex((section) => section.id === activeSection.id);
-  const previousSection = sections[(sectionIndex - 1 + sections.length) % sections.length];
-  const nextSection = sections[(sectionIndex + 1) % sections.length];
 
   const sectionCards = useMemo(
     () => cards.filter((card) => card.sectionId === activeSection.id),
@@ -48,163 +46,134 @@ export function AlbumPages({
     safePageIndex * CARDS_PER_SPREAD + CARDS_PER_SPREAD
   );
 
-  const leftCards = visibleCards.slice(0, 3);
-  const rightCards = visibleCards.slice(3, 6);
+  const leftCards = visibleCards.slice(0, 4);
+  const rightCards = visibleCards.slice(4, 8);
   const sectionCompleted = sectionCards.filter((card) => isPasted(card)).length;
 
   useEffect(() => {
     setPageIndex(0);
   }, [activeSectionId]);
 
-  function previousPage() {
-    setPageIndex((current) => {
-      if (current <= 0) return totalPages - 1;
-      return current - 1;
-    });
+  function previousSpread() {
+    if (safePageIndex > 0) {
+      setPageIndex(safePageIndex - 1);
+      return;
+    }
+
+    const previousSection = sections[(sectionIndex - 1 + sections.length) % sections.length];
+    onChangeSection(previousSection.id);
   }
 
-  function nextPage() {
-    setPageIndex((current) => {
-      if (current >= totalPages - 1) return 0;
-      return current + 1;
-    });
-  }
+  function nextSpread() {
+    if (safePageIndex < totalPages - 1) {
+      setPageIndex(safePageIndex + 1);
+      return;
+    }
 
-  function changeSection(sectionId: SectionId) {
-    setPageIndex(0);
-    onChangeSection(sectionId);
+    const nextSection = sections[(sectionIndex + 1) % sections.length];
+    onChangeSection(nextSection.id);
   }
 
   return (
-    <main className="album-pages-screen">
-      <div className="album-pages-top">
-        <button onClick={onBack}>
-          <ArrowLeft size={18} />
-          Índice
-        </button>
+    <main
+      className="real-album-screen"
+      style={{ "--section-color": activeSection.color } as CSSProperties}
+    >
+      <button className="real-album-back" onClick={onBack}>
+        <ArrowLeft size={26} />
+      </button>
 
-        <div>
-          <strong>{activeSection.name}</strong>
-          <span>
-            Página {safePageIndex + 1} de {totalPages} · {sectionCompleted} / {sectionCards.length} de esta sección · {completed} / {total} total
-          </span>
-        </div>
-      </div>
+      <section className="real-album-stage">
+        <article className="real-album-spread">
+          <div className="real-album-page real-album-page-left">
+            <header className="real-page-header">
+              <span>{activeSection.subtitle}</span>
+              <h1>{activeSection.name}</h1>
+              <p>{activeSection.description}</p>
+            </header>
 
-      <div className="sections-ribbon">
-        {sections.map((section) => (
-          <button
-            key={section.id}
-            className={section.id === activeSection.id ? "active" : ""}
-            onClick={() => changeSection(section.id)}
-            style={{ "--section-color": section.color } as CSSProperties}
-          >
-            {section.name}
-          </button>
-        ))}
-      </div>
-
-      <section
-        className="figuritas-spread section-themed-spread"
-        style={{ "--active-section": activeSection.color } as CSSProperties}
-      >
-        <article className="figuritas-page left">
-          <div className="page-stamp">{activeSection.subtitle}</div>
-          <h2>{activeSection.name}</h2>
-          <p>{activeSection.description}</p>
-
-          <div className="section-arrows">
-            <button onClick={() => changeSection(previousSection.id)}>
-              <ChevronLeft size={18} />
-              {previousSection.name}
-            </button>
-            <button onClick={() => changeSection(nextSection.id)}>
-              {nextSection.name}
-              <ChevronRight size={18} />
-            </button>
-          </div>
-
-          <div className="spread-page-control">
-            <button onClick={previousPage}>
-              <ChevronLeft size={18} />
-              Página anterior
-            </button>
-            <span>{safePageIndex + 1} / {totalPages}</span>
-            <button onClick={nextPage}>
-              Siguiente
-              <ChevronRight size={18} />
-            </button>
-          </div>
-
-          <div className="figuritas-grid">
-            {leftCards.map((card) => (
-              <button
-                key={card.id}
-                className={`figurita-slot ${isPasted(card) ? "pasted" : "empty"}`}
-                onClick={() => onOpenCard(card)}
-                style={{ "--card-color": card.color } as CSSProperties}
-              >
-                {isPasted(card) ? (
-                  <>
-                    <div className="figurita-image">
-                      <IconForCard card={card} />
-                      <span>{card.imageLabel}</span>
-                    </div>
-                    <strong>{card.title}</strong>
-                    <small>{card.section}</small>
-                  </>
-                ) : (
-                  <>
-                    <span className="empty-number">{card.number}</span>
-                    <small>Espacio vacío</small>
-                  </>
-                )}
-              </button>
-            ))}
-          </div>
-        </article>
-
-        <article className="figuritas-page right">
-          <div className="page-side-photo">
-            <MapPin size={18} />
-            Página {safePageIndex + 1} de {activeSection.name}
-          </div>
-
-          <div className="figuritas-grid">
-            {rightCards.map((card) => (
-              <button
-                key={card.id}
-                className={`figurita-slot ${isPasted(card) ? "pasted" : "empty"}`}
-                onClick={() => onOpenCard(card)}
-                style={{ "--card-color": card.color } as CSSProperties}
-              >
-                {isPasted(card) ? (
-                  <>
-                    <div className="figurita-image">
-                      <IconForCard card={card} />
-                      <span>{card.imageLabel}</span>
-                    </div>
-                    <strong>{card.title}</strong>
-                    <small>{card.section}</small>
-                  </>
-                ) : (
-                  <>
-                    <span className="empty-number">{card.number}</span>
-                    <small>Espacio vacío</small>
-                  </>
-                )}
-              </button>
-            ))}
-          </div>
-
-          {rightCards.length === 0 && (
-            <div className="empty-spread-note">
-              <strong>Página libre</strong>
-              <span>Este espacio queda preparado para nuevas figuritas de la sección.</span>
+            <div className="real-sticker-grid">
+              {leftCards.map((card) => (
+                <button
+                  key={card.id}
+                  className={`real-sticker-slot ${isPasted(card) ? "pasted" : "empty"}`}
+                  onClick={() => onOpenCard(card)}
+                  style={{ "--card-color": card.color } as CSSProperties}
+                >
+                  {isPasted(card) ? (
+                    <>
+                      <div className="real-sticker-image">
+                        <IconForCard card={card} size={28} />
+                        <span>{card.imageLabel}</span>
+                      </div>
+                      <strong>{card.title}</strong>
+                      <small>{card.number}</small>
+                    </>
+                  ) : (
+                    <>
+                      <span className="real-empty-number">{card.number}</span>
+                      <em>Espacio vacío</em>
+                    </>
+                  )}
+                </button>
+              ))}
             </div>
-          )}
+          </div>
+
+          <div className="real-album-fold" />
+
+          <div className="real-album-page real-album-page-right">
+            <div className="real-section-progress">
+              <strong>{sectionCompleted}</strong>
+              <span>/ {sectionCards.length}</span>
+            </div>
+
+            <div className="real-sticker-grid">
+              {rightCards.map((card) => (
+                <button
+                  key={card.id}
+                  className={`real-sticker-slot ${isPasted(card) ? "pasted" : "empty"}`}
+                  onClick={() => onOpenCard(card)}
+                  style={{ "--card-color": card.color } as CSSProperties}
+                >
+                  {isPasted(card) ? (
+                    <>
+                      <div className="real-sticker-image">
+                        <IconForCard card={card} size={28} />
+                        <span>{card.imageLabel}</span>
+                      </div>
+                      <strong>{card.title}</strong>
+                      <small>{card.number}</small>
+                    </>
+                  ) : (
+                    <>
+                      <span className="real-empty-number">{card.number}</span>
+                      <em>Espacio vacío</em>
+                    </>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
         </article>
       </section>
+
+      <nav className="real-album-nav">
+        <button onClick={previousSpread}>
+          <ChevronLeft size={32} />
+        </button>
+
+        <div className="real-album-section-pill">
+          <strong>{activeSection.name}</strong>
+          <span>
+            Página {safePageIndex + 1} de {totalPages} · {completed} / {total}
+          </span>
+        </div>
+
+        <button onClick={nextSpread}>
+          <ChevronRight size={32} />
+        </button>
+      </nav>
     </main>
   );
 }
