@@ -866,3 +866,62 @@
     padding: 4px 9px !important;
   }
 }
+
+/* ============================================================
+   CORRECCIÓN PIE DE PÁGINA: solo texto, dentro de página izquierda
+   ============================================================ */
+
+/* La descripción vuelve a estar posicionada dentro del álbum, no fija en pantalla */
+.hist-album-title p {
+  position: absolute !important;
+  left: 0 !important;
+  top: 470% !important;
+  bottom: auto !important;
+  z-index: 30 !important;
+
+  max-width: 32vw !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  border-radius: 0 !important;
+
+  color: rgba(18, 74, 82, .82) !important;
+  font-size: .92rem !important;
+  line-height: 1.25 !important;
+  font-weight: 750 !important;
+  font-style: italic !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.55) !important;
+}
+
+/* Móvil horizontal */
+@media (orientation: landscape) and (max-width: 1000px) {
+  .hist-album-title p {
+    position: absolute !important;
+    left: 0 !important;
+    top: 430% !important;
+    bottom: auto !important;
+
+    max-width: 31vw !important;
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+
+    font-size: .54rem !important;
+    line-height: 1.18 !important;
+    font-weight: 750 !important;
+  }
+}
+
+/* Celulares muy bajos con barra Safari */
+@media (orientation: landscape) and (max-height: 430px) {
+  .hist-album-title p {
+    top: 410% !important;
+    max-width: 31vw !important;
+    font-size: .49rem !important;
+    line-height: 1.16 !important;
+  }
+}
