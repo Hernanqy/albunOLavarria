@@ -1,7 +1,6 @@
-﻿import { useEffect, useMemo, useState, type CSSProperties } from "react";
-import { ArrowLeft, ChevronLeft, ChevronRight, PackageOpen, Sparkles } from "lucide-react";
+﻿import { useEffect, useMemo, useState } from "react";
+import { ArrowLeft, ChevronLeft, ChevronRight, PackageOpen, Sparkles, X } from "lucide-react";
 import type { AlbumCard, AlbumSection, SectionId } from "../../types/album";
-import { IconForCard } from "./IconForCard";
 import { getStickerImage } from "../../data/stickerImages";
 
 type Props = {
@@ -24,18 +23,18 @@ type Props = {
 
 const CARDS_PER_SPREAD = 10;
 
-const SLOT_POSITIONS = [
-  { left: "12.4%", top: "33.3%", width: "9.8%", height: "24.2%" },
-  { left: "24.9%", top: "32.2%", width: "10.2%", height: "25.2%" },
-  { left: "37.2%", top: "33.3%", width: "9.8%", height: "24.2%" },
-  { left: "18.5%", top: "61.6%", width: "9.8%", height: "24.1%" },
-  { left: "30.8%", top: "61.6%", width: "9.8%", height: "24.1%" },
+const SLOT_LAYOUT = [
+  { left: "17.0%", top: "46.5%", width: "9.2%" },
+  { left: "29.2%", top: "46.5%", width: "9.2%" },
+  { left: "41.4%", top: "46.5%", width: "9.2%" },
+  { left: "23.2%", top: "73.0%", width: "9.2%" },
+  { left: "35.4%", top: "73.0%", width: "9.2%" },
 
-  { left: "56.2%", top: "22.4%", width: "10.2%", height: "25.4%" },
-  { left: "70.0%", top: "23.0%", width: "10.2%", height: "25.0%" },
-  { left: "83.7%", top: "23.0%", width: "10.2%", height: "25.0%" },
-  { left: "60.6%", top: "60.1%", width: "10.2%", height: "25.0%" },
-  { left: "72.9%", top: "59.3%", width: "10.2%", height: "25.0%" }
+  { left: "58.8%", top: "37.5%", width: "9.0%" },
+  { left: "70.8%", top: "37.5%", width: "9.0%" },
+  { left: "82.8%", top: "37.5%", width: "9.0%" },
+  { left: "64.8%", top: "71.5%", width: "9.0%" },
+  { left: "76.8%", top: "71.5%", width: "9.0%" }
 ];
 
 export function AlbumPages({
@@ -69,13 +68,15 @@ export function AlbumPages({
   const pendingBelongsToThisSection =
     Boolean(pendingPasteCard) && pendingPasteCard?.sectionId === activeSection.id;
 
-  const pendingIndexInThisSection = pendingBelongsToThisSection && pendingPasteCard
-    ? sectionCards.findIndex((card) => card.id === pendingPasteCard.id)
-    : -1;
+  const pendingIndexInThisSection =
+    pendingBelongsToThisSection && pendingPasteCard
+      ? sectionCards.findIndex((card) => card.id === pendingPasteCard.id)
+      : -1;
 
-  const pendingPageIndex = pendingIndexInThisSection >= 0
-    ? Math.floor(pendingIndexInThisSection / CARDS_PER_SPREAD)
-    : -1;
+  const pendingPageIndex =
+    pendingIndexInThisSection >= 0
+      ? Math.floor(pendingIndexInThisSection / CARDS_PER_SPREAD)
+      : -1;
 
   const totalPages = Math.max(1, Math.ceil(sectionCards.length / CARDS_PER_SPREAD));
 
@@ -150,120 +151,131 @@ export function AlbumPages({
     onOpenCard(card);
   }
 
-  function renderStickerFace(card: AlbumCard) {
-    const imageSrc = getStickerImage(card);
-
-    if (imageSrc) {
-      return <img src={imageSrc} alt={card.title} />;
-    }
-
-    return (
-      <span className="bgalbum-fallback">
-        <IconForCard card={card} size={28} />
-        <b>{card.imageLabel}</b>
-      </span>
-    );
-  }
-
   return (
-    <main className="bgalbum-screen" style={{ "--section-color": activeSection.color } as CSSProperties}>
-      <button className="bgalbum-back" onClick={onBack} aria-label="Volver">
+    <main className="hist-album-screen">
+      <button className="hist-album-back" onClick={onBack} aria-label="Volver">
         <ArrowLeft size={26} />
       </button>
 
-      {lastPastedCard && (
-        <div className="bgalbum-toast">
-          <div>
-            <Sparkles size={18} />
-            <strong>Figurita pegada</strong>
-            <span>{lastPastedCard.title}</span>
-          </div>
-
-          <strong className="bgalbum-toast-progress">
-            {completed}/{total}
-          </strong>
-
-          <div className="bgalbum-toast-actions">
-            {hasOpenPack && (
-              <button onClick={onReturnToPack}>
-                <PackageOpen size={16} />
-                Volver al sobre
-              </button>
-            )}
-
-            <button className="secondary" onClick={onStayInAlbum}>
-              Seguir
-            </button>
-          </div>
+      {pendingPasteCard && pendingPasteCard.sectionId === activeSection.id && (
+        <div className="hist-paste-hint">
+          <Sparkles size={16} />
+          Tocá el espacio marcado para pegar "{pendingPasteCard.title}"
         </div>
       )}
 
-      <section className="bgalbum-book">
+      {lastPastedCard && (
+        <div className="hist-mini-actions">
+          <div className="hist-mini-actions__text">
+            <Sparkles size={16} />
+            <span>{lastPastedCard.title}</span>
+          </div>
+
+          {hasOpenPack && (
+            <button onClick={onReturnToPack} className="hist-mini-actions__btn">
+              <PackageOpen size={14} />
+              Sobre
+            </button>
+          )}
+
+          <button onClick={onStayInAlbum} className="hist-mini-actions__btn secondary">
+            <X size={14} />
+            Cerrar
+          </button>
+        </div>
+      )}
+
+      <section className="hist-album-book">
         <img
-          className="bgalbum-image"
           src="/images/album/album-bg-historia.png"
           alt=""
+          className="hist-album-book__bg"
           draggable={false}
         />
 
+        <div className="hist-album-title">
+          <span>{activeSection.subtitle}</span>
+          <h1>{activeSection.name}</h1>
+          <p>{activeSection.description}</p>
+        </div>
+
+        <div className="hist-album-progress">
+          {sectionCompleted} / {sectionCards.length}
+        </div>
+
         {visibleCards.map((card, index) => {
+          const layout = SLOT_LAYOUT[index];
+          if (!layout) return null;
+
           const pasted = isPasted(card);
           const isPendingTarget = pendingPasteCard?.id === card.id && !pasted;
           const isJustPasted = justPastedId === card.id;
-          const slotPosition = SLOT_POSITIONS[index];
-
-          if (!slotPosition) return null;
+          const imageSrc = getStickerImage(card);
 
           return (
             <button
               key={card.id}
               className={[
-                "bgalbum-slot",
+                "hist-album-slot",
                 pasted ? "pasted" : "empty",
                 isPendingTarget ? "target" : "",
                 isJustPasted ? "just-pasted" : ""
               ].join(" ")}
-              style={slotPosition as CSSProperties}
+              style={{
+                left: layout.left,
+                top: layout.top,
+                width: layout.width
+              }}
               onClick={() => handleSlotClick(card)}
             >
               {(pasted || isJustPasted) ? (
-                <span className="bgalbum-sticker">
-                  {renderStickerFace(card)}
-                </span>
-              ) : (
-                <span className="bgalbum-empty">
-                  <span>{card.number}</span>
-
-                  {isPendingTarget && (
-                    <strong>
-                      <Sparkles size={15} />
-                      Pegar acá
-                    </strong>
+                <>
+                  {imageSrc ? (
+                    <img
+                      src={imageSrc}
+                      alt={card.title}
+                      className="hist-album-slot__sticker"
+                    />
+                  ) : (
+                    <div className="hist-album-slot__fallback">{card.title}</div>
                   )}
-                </span>
+                </>
+              ) : (
+                <div className="hist-album-slot__frame">
+                  <span className="hist-album-slot__code">
+                    {card.number}
+                  </span>
+
+                  <span className="hist-album-slot__burst" />
+
+                  {isPendingTarget ? (
+                    <span className="hist-album-slot__cta">Pegá acá</span>
+                  ) : (
+                    <span className="hist-album-slot__empty-text">Espacio vacío</span>
+                  )}
+                </div>
               )}
             </button>
           );
         })}
       </section>
 
-      <nav className="bgalbum-nav">
-        <button onClick={previousSpread} aria-label="Página anterior">
-          <ChevronLeft size={32} />
+      <nav className="hist-album-nav">
+        <button onClick={previousSpread} aria-label="Anterior">
+          <ChevronLeft size={30} />
         </button>
 
-        <div className="bgalbum-pill">
+        <div className="hist-album-nav__pill">
           <strong>{activeSection.name}</strong>
           <span>
-            Página {currentPageIndex + 1} de {totalPages} · {sectionCompleted} / {sectionCards.length}
+            Página {currentPageIndex + 1} de {totalPages} · {completed} / {total}
           </span>
         </div>
 
-        <button onClick={nextSpread} aria-label="Página siguiente">
-          <ChevronRight size={32} />
+        <button onClick={nextSpread} aria-label="Siguiente">
+          <ChevronRight size={30} />
         </button>
       </nav>
     </main>
   );
 }
-
