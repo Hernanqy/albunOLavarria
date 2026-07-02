@@ -693,3 +693,176 @@
     max-height: calc(100dvh - 70px) !important;
   }
 }
+
+/* ============================================================
+   AJUSTE FINO: evitar superposición en celular horizontal
+   ============================================================ */
+@media (orientation: landscape) and (max-width: 1000px) {
+  .hist-album-book {
+    --slot-mobile-scale: 1.08 !important;
+  }
+
+  /* fila superior izquierda */
+  .hist-album-book .hist-album-slot:nth-of-type(1) {
+    left: 16.6% !important;
+    top: 48.6% !important;
+  }
+
+  .hist-album-book .hist-album-slot:nth-of-type(2) {
+    left: 29.0% !important;
+    top: 48.6% !important;
+  }
+
+  .hist-album-book .hist-album-slot:nth-of-type(3) {
+    left: 41.4% !important;
+    top: 48.6% !important;
+  }
+
+  /* fila inferior izquierda: más abajo y un poco más separada */
+  .hist-album-book .hist-album-slot:nth-of-type(4) {
+    left: 22.6% !important;
+    top: 77.8% !important;
+  }
+
+  .hist-album-book .hist-album-slot:nth-of-type(5) {
+    left: 35.8% !important;
+    top: 77.8% !important;
+  }
+
+  /* página derecha */
+  .hist-album-book .hist-album-slot:nth-of-type(6) {
+    left: 59.4% !important;
+    top: 39.2% !important;
+  }
+
+  .hist-album-book .hist-album-slot:nth-of-type(7) {
+    left: 71.4% !important;
+    top: 39.2% !important;
+  }
+
+  .hist-album-book .hist-album-slot:nth-of-type(8) {
+    left: 83.4% !important;
+    top: 39.2% !important;
+  }
+
+  .hist-album-book .hist-album-slot:nth-of-type(9) {
+    left: 65.2% !important;
+    top: 72.8% !important;
+  }
+
+  .hist-album-book .hist-album-slot:nth-of-type(10) {
+    left: 77.4% !important;
+    top: 72.8% !important;
+  }
+}
+
+/* iPhone / celulares más bajos */
+@media (orientation: landscape) and (max-height: 430px) {
+  .hist-album-book {
+    --slot-mobile-scale: 1.02 !important;
+  }
+
+  .hist-album-book .hist-album-slot:nth-of-type(1),
+  .hist-album-book .hist-album-slot:nth-of-type(2),
+  .hist-album-book .hist-album-slot:nth-of-type(3) {
+    top: 49.2% !important;
+  }
+
+  .hist-album-book .hist-album-slot:nth-of-type(4),
+  .hist-album-book .hist-album-slot:nth-of-type(5) {
+    top: 78.6% !important;
+  }
+}
+
+/* ============================================================
+   AJUSTE FINAL: título limpio + descripción como pie de página
+   ============================================================ */
+
+/* Mantiene el título arriba y evita que el texto largo se meta bajo figuritas */
+.hist-album-title {
+  width: 28% !important;
+  z-index: 20 !important;
+}
+
+.hist-album-title h1 {
+  font-size: clamp(2.2rem, 3.8vw, 4.5rem) !important;
+  line-height: .9 !important;
+  margin-bottom: 0 !important;
+}
+
+/* La descripción pasa a ser una frase tipo pie de página */
+.hist-album-title p {
+  position: fixed !important;
+  left: 7.2vw !important;
+  bottom: calc(max(10px, env(safe-area-inset-bottom)) + 84px) !important;
+  z-index: 30 !important;
+  max-width: 34vw !important;
+  margin: 0 !important;
+  padding: 8px 14px !important;
+  border-radius: 999px !important;
+  background: rgba(255, 250, 235, .62) !important;
+  color: rgba(18, 74, 82, .78) !important;
+  font-size: .88rem !important;
+  line-height: 1.25 !important;
+  font-weight: 650 !important;
+  font-style: italic !important;
+  box-shadow: 0 8px 18px rgba(0,0,0,.07) !important;
+  backdrop-filter: blur(6px) !important;
+}
+
+.hist-album-title p::before {
+  content: "“";
+}
+
+.hist-album-title p::after {
+  content: "”";
+}
+
+/* Móvil horizontal */
+@media (orientation: landscape) and (max-width: 1000px) {
+  .hist-album-title {
+    left: 4.8% !important;
+    top: 11.8% !important;
+    width: 28% !important;
+  }
+
+  .hist-album-title span {
+    font-size: .56rem !important;
+    padding: 5px 10px !important;
+    margin-bottom: 5px !important;
+  }
+
+  .hist-album-title h1 {
+    font-size: clamp(1.45rem, 4vw, 2.35rem) !important;
+    line-height: .88 !important;
+  }
+
+  .hist-album-title p {
+    left: 5.8vw !important;
+    bottom: 54px !important;
+    max-width: 35vw !important;
+    padding: 5px 10px !important;
+    font-size: .52rem !important;
+    line-height: 1.18 !important;
+    border-radius: 14px !important;
+    background: rgba(255, 250, 235, .52) !important;
+  }
+}
+
+/* Celulares muy bajos con barra Safari */
+@media (orientation: landscape) and (max-height: 430px) {
+  .hist-album-title {
+    top: 10.8% !important;
+  }
+
+  .hist-album-title h1 {
+    font-size: 1.34rem !important;
+  }
+
+  .hist-album-title p {
+    bottom: 48px !important;
+    max-width: 36vw !important;
+    font-size: .48rem !important;
+    padding: 4px 9px !important;
+  }
+}
