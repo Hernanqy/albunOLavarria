@@ -6,8 +6,7 @@ import { resetAlbumOnDevStart } from "./devReset";
 import "./styles/globals.css";
 import "./styles/cover-fixed.css";
 import "./styles/final-mobile-fixes.css";
-import "./styles/album-mobile-final.css";
-import "./styles/album-art-direction.css";
+import "./styles/album-background-layout.css";
 
 resetAlbumOnDevStart();
 
