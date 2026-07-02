@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { ArrowLeft, ChevronLeft, ChevronRight, PackageOpen, Sparkles, X } from "lucide-react";
 import type { AlbumCard, AlbumSection, SectionId } from "../../types/album";
 import { getStickerImage } from "../../data/stickerImages";
@@ -24,17 +24,17 @@ type Props = {
 const CARDS_PER_SPREAD = 10;
 
 const SLOT_LAYOUT = [
-  { left: "17.0%", top: "46.5%", width: "9.2%" },
-  { left: "29.2%", top: "46.5%", width: "9.2%" },
-  { left: "41.4%", top: "46.5%", width: "9.2%" },
-  { left: "23.2%", top: "73.0%", width: "9.2%" },
-  { left: "35.4%", top: "73.0%", width: "9.2%" },
+  { left: "16.8%", top: "47.5%", width: "8.8%" },
+  { left: "28.8%", top: "47.5%", width: "8.8%" },
+  { left: "40.8%", top: "47.5%", width: "8.8%" },
+  { left: "22.8%", top: "74.0%", width: "8.8%" },
+  { left: "34.8%", top: "74.0%", width: "8.8%" },
 
-  { left: "58.8%", top: "37.5%", width: "9.0%" },
-  { left: "70.8%", top: "37.5%", width: "9.0%" },
-  { left: "82.8%", top: "37.5%", width: "9.0%" },
-  { left: "64.8%", top: "71.5%", width: "9.0%" },
-  { left: "76.8%", top: "71.5%", width: "9.0%" }
+  { left: "58.8%", top: "38.2%", width: "8.6%" },
+  { left: "70.8%", top: "38.2%", width: "8.6%" },
+  { left: "82.8%", top: "38.2%", width: "8.6%" },
+  { left: "64.8%", top: "72.0%", width: "8.6%" },
+  { left: "76.8%", top: "72.0%", width: "8.6%" }
 ];
 
 export function AlbumPages({
@@ -186,13 +186,6 @@ export function AlbumPages({
       )}
 
       <section className="hist-album-book">
-        <img
-          src="/images/album/album-bg-historia.png"
-          alt=""
-          className="hist-album-book__bg"
-          draggable={false}
-        />
-
         <div className="hist-album-title">
           <span>{activeSection.subtitle}</span>
           <h1>{activeSection.name}</h1>
@@ -221,11 +214,13 @@ export function AlbumPages({
                 isPendingTarget ? "target" : "",
                 isJustPasted ? "just-pasted" : ""
               ].join(" ")}
-              style={{
-                left: layout.left,
-                top: layout.top,
-                width: layout.width
-              }}
+              style={
+                {
+                  "--slot-left": layout.left,
+                  "--slot-top": layout.top,
+                  "--slot-width": layout.width
+                } as CSSProperties
+              }
               onClick={() => handleSlotClick(card)}
             >
               {(pasted || isJustPasted) ? (
@@ -242,10 +237,7 @@ export function AlbumPages({
                 </>
               ) : (
                 <div className="hist-album-slot__frame">
-                  <span className="hist-album-slot__code">
-                    {card.number}
-                  </span>
-
+                  <span className="hist-album-slot__code">{card.number}</span>
                   <span className="hist-album-slot__burst" />
 
                   {isPendingTarget ? (
