@@ -925,3 +925,138 @@
     line-height: 1.16 !important;
   }
 }
+
+/* ============================================================
+   PIE DE PÁGINA PROPORCIONAL DENTRO DEL ÁLBUM
+   ============================================================ */
+
+/* Ocultamos cualquier descripción vieja que haya quedado dentro del título */
+.hist-album-title p {
+  display: none !important;
+}
+
+/* Pie de página real: ubicado sobre la zona celeste de la página izquierda */
+.hist-album-footnote {
+  position: absolute !important;
+  left: 4.8% !important;
+  bottom: 23.5% !important;
+  z-index: 22 !important;
+
+  width: 34% !important;
+  max-width: 34% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+
+  color: rgba(18, 74, 82, .78) !important;
+  font-size: clamp(.72rem, .85vw, 1rem) !important;
+  line-height: 1.18 !important;
+  font-weight: 800 !important;
+  font-style: italic !important;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.58),
+    0 2px 8px rgba(255,255,255,.28) !important;
+}
+
+.hist-album-footnote::before {
+  content: "“";
+}
+
+.hist-album-footnote::after {
+  content: "”";
+}
+
+/* Celular horizontal: misma ubicación relativa, escalada */
+@media (orientation: landscape) and (max-width: 1000px) {
+  .hist-album-footnote {
+    left: 4.8% !important;
+    bottom: 24.5% !important;
+    width: 34% !important;
+    max-width: 34% !important;
+
+    font-size: clamp(.44rem, 1vw, .62rem) !important;
+    line-height: 1.12 !important;
+    font-weight: 800 !important;
+  }
+}
+
+/* iPhone / pantallas muy bajas */
+@media (orientation: landscape) and (max-height: 430px) {
+  .hist-album-footnote {
+    left: 4.8% !important;
+    bottom: 25.5% !important;
+    width: 34% !important;
+
+    font-size: .44rem !important;
+    line-height: 1.1 !important;
+  }
+}
+
+/* ============================================================
+   AJUSTE FINAL PIE + CASILLEROS LIMPIOS
+   ============================================================ */
+
+/* Oculta por completo cualquier resto del texto Espacio vacío */
+.hist-album-slot__empty-text {
+  display: none !important;
+}
+
+/* El pie queda en la base celeste de la página izquierda, debajo de los cuadros */
+.hist-album-footnote {
+  position: absolute !important;
+  left: 4.6% !important;
+  bottom: 10.8% !important;
+  z-index: 22 !important;
+
+  width: 41% !important;
+  max-width: 41% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+
+  color: rgba(18, 74, 82, .82) !important;
+  font-size: clamp(.72rem, .82vw, .96rem) !important;
+  line-height: 1.15 !important;
+  font-weight: 800 !important;
+  font-style: italic !important;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.62),
+    0 2px 8px rgba(255,255,255,.32) !important;
+
+  pointer-events: none !important;
+}
+
+/* Para que no se meta bajo los cuadros 4 y 5, en móvil baja y achica */
+@media (orientation: landscape) and (max-width: 1000px) {
+  .hist-album-footnote {
+    left: 4.7% !important;
+    bottom: 9.6% !important;
+    width: 38% !important;
+    max-width: 38% !important;
+
+    font-size: clamp(.42rem, .95vw, .56rem) !important;
+    line-height: 1.1 !important;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 430px) {
+  .hist-album-footnote {
+    left: 4.6% !important;
+    bottom: 8.6% !important;
+    width: 38% !important;
+    max-width: 38% !important;
+
+    font-size: .42rem !important;
+    line-height: 1.08 !important;
+  }
+}

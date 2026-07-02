@@ -189,12 +189,16 @@ export function AlbumPages({
         <div className="hist-album-title">
           <span>{activeSection.subtitle}</span>
           <h1>{activeSection.name}</h1>
-          <p>{activeSection.description}</p>
+
         </div>
 
         <div className="hist-album-progress">
           {sectionCompleted} / {sectionCards.length}
         </div>
+
+        <p className="hist-album-footnote">
+          {activeSection.description}
+        </p>
 
         {visibleCards.map((card, index) => {
           const layout = SLOT_LAYOUT[index];
@@ -242,9 +246,7 @@ export function AlbumPages({
 
                   {isPendingTarget ? (
                     <span className="hist-album-slot__cta">Pegá acá</span>
-                  ) : (
-                    <span className="hist-album-slot__empty-text">Espacio vacío</span>
-                  )}
+                  ) : null}
                 </div>
               )}
             </button>
@@ -271,3 +273,5 @@ export function AlbumPages({
     </main>
   );
 }
+
+
