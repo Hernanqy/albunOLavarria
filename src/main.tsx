@@ -7,8 +7,7 @@ import "./styles/globals.css";
 import "./styles/cover-fixed.css";
 import "./styles/final-mobile-fixes.css";
 import "./styles/album-mobile-final.css";
-import "./styles/album-panini-override.css";
-import "./styles/album-layout-v2.css";
+import "./styles/album-redesign.css";
 
 resetAlbumOnDevStart();
 

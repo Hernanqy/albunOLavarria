@@ -1,0 +1,681 @@
+﻿/* ============================================================
+   ALBUM REDESIGN
+   Nuevo diseño completo. No depende de clases real-*.
+   ============================================================ */
+
+.neo-album-screen {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,255,255,.92), transparent 26%),
+    radial-gradient(circle at 8% 86%, rgba(44,196,182,.26), transparent 28%),
+    radial-gradient(circle at 92% 88%, rgba(255,208,93,.24), transparent 30%),
+    linear-gradient(180deg, #d9eef0 0%, #eff3e3 48%, #c7e5e8 100%);
+  color: #133c43;
+}
+
+.neo-album-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: .18;
+  background-image:
+    radial-gradient(circle, rgba(19,73,78,.22) 1px, transparent 1px);
+  background-size: 18px 18px;
+  pointer-events: none;
+}
+
+.neo-back {
+  position: fixed;
+  left: max(14px, env(safe-area-inset-left));
+  top: max(12px, env(safe-area-inset-top));
+  z-index: 30;
+  width: 54px;
+  height: 54px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255,255,255,.94);
+  color: #0d3137;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 12px 26px rgba(0,0,0,.15);
+}
+
+.neo-book {
+  position: relative;
+  z-index: 2;
+  width: min(1180px, 94vw);
+  height: min(650px, 76dvh);
+  transform: translateY(-8px);
+  display: grid;
+  place-items: center;
+}
+
+.neo-spread {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 18px minmax(0, 1fr);
+  overflow: hidden;
+  border-radius: 30px;
+  background: #fffaf0;
+  box-shadow:
+    0 30px 70px rgba(18,57,61,.2),
+    inset 0 0 0 1px rgba(25,78,83,.08);
+}
+
+.neo-fold {
+  position: relative;
+  background:
+    linear-gradient(90deg,
+      rgba(0,0,0,.12),
+      rgba(255,255,255,.8) 28%,
+      rgba(78,104,105,.22) 50%,
+      rgba(255,255,255,.72) 74%,
+      rgba(0,0,0,.08));
+}
+
+.neo-page {
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  padding: 24px 26px 22px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.96), rgba(250,247,235,.96));
+}
+
+.neo-page-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(36,190,178,.18), transparent 24%),
+    radial-gradient(circle at 84% 82%, rgba(255,209,102,.18), transparent 24%),
+    linear-gradient(135deg, rgba(24,94,101,.05), transparent 45%);
+}
+
+.neo-page-bg::after {
+  content: "";
+  position: absolute;
+  inset: -18%;
+  opacity: .16;
+  background:
+    repeating-radial-gradient(circle at 20% 20%, transparent 0 16px, rgba(19,73,78,.22) 17px 18px);
+  transform: rotate(-8deg);
+}
+
+.neo-page-bg.right {
+  background:
+    radial-gradient(circle at 78% 22%, rgba(36,190,178,.16), transparent 24%),
+    radial-gradient(circle at 20% 84%, rgba(255,209,102,.18), transparent 26%),
+    linear-gradient(225deg, rgba(24,94,101,.05), transparent 45%);
+}
+
+.neo-page-title {
+  position: relative;
+  z-index: 2;
+}
+
+.neo-page-title span {
+  display: inline-flex;
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: #d7f4ef;
+  color: #155b5f;
+  font-size: .72rem;
+  font-weight: 950;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+
+.neo-page-title h1 {
+  margin: 8px 0 0;
+  font-size: clamp(1.8rem, 2.5vw, 2.3rem);
+  line-height: .92;
+  color: #143d45;
+}
+
+.neo-progress {
+  position: relative;
+  z-index: 4;
+  justify-self: end;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  padding: 9px 13px;
+  border-radius: 18px;
+  background: rgba(215,244,239,.9);
+  color: #143d45;
+  box-shadow: 0 10px 22px rgba(0,0,0,.08);
+}
+
+.neo-progress strong {
+  font-size: 1.15rem;
+}
+
+.neo-progress span {
+  font-size: .85rem;
+}
+
+.neo-section-art {
+  position: absolute;
+  left: 24px;
+  top: 24px;
+  z-index: 1;
+  font-size: clamp(2.5rem, 5vw, 5.6rem);
+  font-weight: 1000;
+  letter-spacing: -.08em;
+  line-height: .78;
+  color: rgba(20,74,80,.055);
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.neo-slots {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 18px 26px;
+  align-items: center;
+  justify-items: center;
+  min-width: 0;
+  min-height: 0;
+}
+
+.neo-slot {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  display: grid;
+  place-items: center;
+  overflow: visible;
+}
+
+/* Este es el único contenedor visual.
+   Tiene forma de figurita, no de celda horizontal. */
+.neo-sticker-shape {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(86%, 166px);
+  aspect-ratio: 0.72 / 1;
+  max-height: 100%;
+  border-radius: 18px;
+  overflow: visible;
+}
+
+.neo-empty-shape {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  border: 2px dashed rgba(99,135,140,.42);
+  background:
+    radial-gradient(circle at 50% 36%, rgba(255,255,255,.95), rgba(255,255,255,.52) 30%, transparent 60%),
+    linear-gradient(180deg, rgba(255,255,255,.78), rgba(239,246,242,.72));
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.75),
+    0 10px 20px rgba(0,0,0,.055);
+}
+
+.neo-empty-number {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: rgba(255,255,255,.9);
+  color: #5b7980;
+  font-size: 1.8rem;
+  font-weight: 950;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.04);
+}
+
+.neo-empty-text {
+  position: absolute;
+  left: 50%;
+  bottom: 13px;
+  transform: translateX(-50%);
+  color: #6d8589;
+  font-size: .76rem;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+/* Figurita pegada: NO hay fondo grande.
+   Se ve solo la figurita. */
+.neo-sticker-image {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.neo-sticker-image img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
+  filter: drop-shadow(0 9px 15px rgba(0,0,0,.2));
+}
+
+.neo-slot.is-pasted .neo-sticker-shape,
+.neo-slot.is-just-pasted .neo-sticker-shape {
+  background: transparent;
+  box-shadow: none;
+}
+
+.neo-slot.is-target .neo-empty-shape {
+  border: 3px solid #ffd166;
+  animation: neoPulse 1s ease-in-out infinite;
+}
+
+@keyframes neoPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 0 rgba(255,209,102,.12),
+      inset 0 0 0 1px rgba(255,255,255,.82);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 8px rgba(255,209,102,.18),
+      inset 0 0 0 1px rgba(255,255,255,.96);
+  }
+}
+
+.neo-paste-badge {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.94);
+  color: #155b5f;
+  font-size: .62rem;
+  font-weight: 950;
+  box-shadow: 0 10px 22px rgba(0,0,0,.14);
+  white-space: nowrap;
+}
+
+.neo-ghost {
+  position: absolute;
+  inset: 8px;
+  width: calc(100% - 16px);
+  height: calc(100% - 16px);
+  object-fit: contain;
+  opacity: .18;
+}
+
+.neo-fallback-sticker {
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 8px;
+  background: linear-gradient(180deg, var(--card-color), #fff);
+  color: #123;
+}
+
+.neo-toast {
+  position: fixed;
+  right: max(14px, env(safe-area-inset-right));
+  top: max(12px, env(safe-area-inset-top));
+  z-index: 50;
+  width: 238px;
+  padding: 12px;
+  border-radius: 22px;
+  background: rgba(250,244,229,.96);
+  color: #143d45;
+  box-shadow: 0 18px 38px rgba(0,0,0,.16);
+}
+
+.neo-toast-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.neo-toast-title strong {
+  font-size: .98rem;
+  line-height: 1;
+}
+
+.neo-toast > span {
+  display: block;
+  margin-top: 4px;
+  font-size: .83rem;
+  font-weight: 800;
+  color: #4d6568;
+}
+
+.neo-toast-actions {
+  display: grid;
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.neo-toast-actions button {
+  min-height: 38px;
+  border: 0;
+  border-radius: 999px;
+  background: #0d4b57;
+  color: white;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.neo-toast-actions button.secondary {
+  background: rgba(13,75,87,.12);
+  color: #0d4b57;
+}
+
+.neo-paste-instruction {
+  position: fixed;
+  left: 50%;
+  top: max(12px, env(safe-area-inset-top));
+  transform: translateX(-50%);
+  z-index: 45;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  color: #143d45;
+  background: rgba(255,255,255,.9);
+  box-shadow: 0 12px 26px rgba(0,0,0,.12);
+  font-size: .82rem;
+  font-weight: 900;
+}
+
+.neo-error {
+  color: #8a1f1f;
+}
+
+.neo-nav {
+  position: fixed;
+  left: 50%;
+  bottom: max(10px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.neo-nav button {
+  width: 58px;
+  height: 58px;
+  border: 0;
+  border-radius: 999px;
+  background: #07080a;
+  color: white;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 12px 24px rgba(0,0,0,.26);
+}
+
+.neo-pill {
+  min-width: 280px;
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: #07080a;
+  color: white;
+  text-align: center;
+  box-shadow: 0 12px 24px rgba(0,0,0,.26);
+}
+
+.neo-pill strong {
+  display: block;
+  font-size: 1.18rem;
+  line-height: 1;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.neo-pill span {
+  display: block;
+  margin-top: 5px;
+  font-size: .78rem;
+  color: rgba(255,255,255,.78);
+  font-weight: 800;
+}
+
+/* ============================================================
+   MOBILE HORIZONTAL
+   ============================================================ */
+
+@media (orientation: landscape) and (max-width: 1000px) and (max-height: 560px) {
+  .neo-book {
+    width: 96vw;
+    height: 74dvh;
+    transform: translateY(-8px);
+  }
+
+  .neo-spread {
+    grid-template-columns: minmax(0, 1fr) 14px minmax(0, 1fr);
+    border-radius: 18px;
+  }
+
+  .neo-page {
+    padding: 13px 13px 10px;
+    gap: 7px;
+  }
+
+  .neo-page-title span {
+    padding: 5px 8px;
+    font-size: .42rem;
+  }
+
+  .neo-page-title h1 {
+    margin-top: 4px;
+    font-size: .92rem;
+  }
+
+  .neo-progress {
+    padding: 5px 8px;
+  }
+
+  .neo-progress strong {
+    font-size: .9rem;
+  }
+
+  .neo-progress span {
+    font-size: .62rem;
+  }
+
+  .neo-section-art {
+    font-size: 2.7rem;
+    left: 14px;
+    top: 16px;
+  }
+
+  .neo-slots {
+    gap: 7px 12px;
+  }
+
+  .neo-sticker-shape {
+    width: min(88%, 112px);
+    border-radius: 11px;
+  }
+
+  .neo-empty-shape {
+    border-radius: 11px;
+  }
+
+  .neo-empty-number {
+    width: 36px;
+    height: 36px;
+    font-size: 1.15rem;
+  }
+
+  .neo-empty-text {
+    bottom: 8px;
+    font-size: .54rem;
+  }
+
+  .neo-back {
+    width: 42px;
+    height: 42px;
+  }
+
+  .neo-toast {
+    width: 174px;
+    padding: 8px;
+    border-radius: 18px;
+  }
+
+  .neo-toast-title strong {
+    font-size: .76rem;
+  }
+
+  .neo-toast > span {
+    font-size: .64rem;
+  }
+
+  .neo-toast-actions button {
+    min-height: 30px;
+    font-size: .62rem;
+  }
+
+  .neo-nav {
+    bottom: 4px;
+    gap: 8px;
+  }
+
+  .neo-nav button {
+    width: 42px;
+    height: 42px;
+  }
+
+  .neo-pill {
+    min-width: 174px;
+    padding: 8px 14px;
+  }
+
+  .neo-pill strong {
+    font-size: .82rem;
+  }
+
+  .neo-pill span {
+    font-size: .56rem;
+  }
+}
+
+/* iPhone con barra Safari visible */
+@media (orientation: landscape) and (max-width: 950px) and (max-height: 430px) {
+  .neo-book {
+    width: 97vw;
+    height: 72dvh;
+  }
+
+  .neo-page {
+    padding: 10px 10px 8px;
+    gap: 5px;
+  }
+
+  .neo-slots {
+    gap: 5px 10px;
+  }
+
+  .neo-sticker-shape {
+    width: min(88%, 100px);
+  }
+
+  .neo-page-title h1 {
+    font-size: .78rem;
+  }
+
+  .neo-page-title span {
+    font-size: .35rem;
+  }
+
+  .neo-toast {
+    width: 158px;
+    padding: 7px;
+  }
+
+  .neo-toast-actions button {
+    min-height: 27px;
+    font-size: .56rem;
+  }
+}
+
+/* ============================================================
+   INTRO VERTICAL
+   ============================================================ */
+
+@media (orientation: portrait) and (max-width: 900px) {
+  .neo-album-screen::after {
+    content: "Hola, vamos a jugar\A\A Girá la pantalla para iniciar";
+    white-space: pre-line;
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    display: grid;
+    place-items: center;
+    padding: 36px;
+    text-align: center;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: clamp(2rem, 8vw, 3.2rem);
+    font-weight: 950;
+    line-height: .95;
+    letter-spacing: -0.05em;
+    color: #173a3b;
+    background:
+      radial-gradient(circle at 50% 22%, rgba(255,255,255,.95), rgba(255,255,255,.66) 24%, transparent 44%),
+      radial-gradient(circle at 18% 78%, rgba(255,209,102,.45), transparent 28%),
+      radial-gradient(circle at 82% 74%, rgba(62,190,178,.36), transparent 30%),
+      linear-gradient(160deg, #d8eff3 0%, #c7ece6 45%, #f6f1df 100%);
+  }
+
+  .neo-album-screen::before {
+    content: "📱↻";
+    position: fixed;
+    left: 50%;
+    top: 68%;
+    transform: translateX(-50%);
+    z-index: 1000000;
+    font-size: clamp(4rem, 16vw, 6rem);
+    animation: neoIntroRotate 1.2s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes neoIntroRotate {
+  from {
+    transform: translateX(-50%) rotate(-14deg) scale(.96);
+  }
+
+  to {
+    transform: translateX(-50%) rotate(14deg) scale(1.04);
+  }
+}
